@@ -1,0 +1,50 @@
+@import '~normalize.css/normalize.css';
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;700&display=swap');
+
+:root {
+    --animate-fadein: fadein;
+    --animate-fadeout: fadeout;
+    --font-family: 'Montserrat', sans-serif;
+    --font-size-normal: 1.6rem;
+    --primary-color: blue;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+    line-height: 1.6rem;
+}
+
+body {
+    font-family: var(--font-family);
+    text-rendering: optimizeSpeed;
+    overflow-y: scroll;
+}
+
+ol,
+ul {
+    list-style: none;
+}
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeout {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
