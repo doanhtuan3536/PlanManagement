@@ -5,8 +5,13 @@
     --animate-fadein: fadein;
     --animate-fadeout: fadeout;
     --font-family: 'Montserrat', sans-serif;
+
     --font-size-normal: 1.6rem;
-    --primary-color: blue;
+    --font-size-header: 1.9rem;
+    --primary-color: rgba(4, 130, 233, 0.897);
+    --min-header-height: 70px;
+    --black-color: black;
+    --white-color: white;
 }
 
 * {

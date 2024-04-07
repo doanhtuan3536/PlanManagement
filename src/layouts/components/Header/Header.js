@@ -1,26 +1,50 @@
 import classNames from 'classnames/bind';
+import { Link, NavLink } from 'react-router-dom';
 
-import { Link } from 'react-router-dom';
+import { KeyRouteFullPath } from '~/utils';
+import Button from '../Button';
 
 import styles from './Header.module.scss';
-import config from '~/config';
+// import config from '~/config';
 const cx = classNames.bind(styles);
 function Header() {
     return (
-        <div className={cx('wrapper')}>
+        <header className={cx('wrapper')}>
             <div className="grid wide">
-                <div className={cx('navbar-list')}>
-                    {Object.keys(config.routes).map((route, index) => {
-                        return (
-                            <Link key={index} to={config.routes[route].path}>
-                                {route}
+                <div className={cx('navbar-inner')}>
+                    <ul className={cx('navbar-list-items', 'main-navbar-list-items')}>
+                        <li className={cx('navbar-list-item')}>
+                            <NavLink
+                                className={({ isActive }) => {
+                                    return isActive ? cx('navbar-list-link') : cx('navbar-list-link', 'active');
+                                }}
+                                to={KeyRouteFullPath('home')}
+                            >
+                                Home
+                            </NavLink>
+                        </li>
+                        <li className={cx('navbar-list-item')}>
+                            <Link className={cx('navbar-list-link')} to={KeyRouteFullPath('projects')}>
+                                Projects
                             </Link>
-                        );
-                    })}
-                    <Link to={'/projects/form'}>form</Link>
+                        </li>
+                        <Button primary>Create</Button>
+                    </ul>
+                    <ul className={cx('navbar-list-items')}>
+                        <li className={cx('navbar-list-item', 'has-line-separator')}>
+                            <Link className={cx('navbar-list-link')} to={KeyRouteFullPath('home')}>
+                                Login
+                            </Link>
+                        </li>
+                        <li className={cx('navbar-list-item')}>
+                            <Link className={cx('navbar-list-link')} to={KeyRouteFullPath('projects')}>
+                                Sign up
+                            </Link>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
+        </header>
         // <div>haha</div>
     );
 }

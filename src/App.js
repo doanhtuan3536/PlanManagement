@@ -10,7 +10,7 @@ function App() {
     function RenderChildRoute(insideChildren) {
         return insideChildren.map((route, index) => {
             const Page = route.Component;
-            if (route.insideRoute) {
+            if (route.insideRoute && Object.keys(route.insideRoute).length != 0) {
                 return (
                     <Route
                         key={index}

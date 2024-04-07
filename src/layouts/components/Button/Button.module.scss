@@ -1,0 +1,27 @@
+.wrapper {
+    margin: 0;
+    background-color: transparent;
+    padding: 0.7em 1.5em;
+    font-size: var(--font-size-normal);
+    border: 2px solid var(--black-color);
+    text-decoration: none;
+    cursor: pointer;
+    color: var(--black-color);
+    font-weight: 500;
+    line-height: 1em;
+    transition: all 0.25s ease;
+    &:hover {
+        background-color: var(--black-color);
+        color: var(--white-color);
+    }
+}
+
+.primary {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border: var(--primary-color);
+    &:hover {
+        background-color: var(--primary-color);
+        opacity: 0.8;
+    }
+}

@@ -2,8 +2,6 @@ import { lazy } from 'react';
 
 import { KeyRouteFullPath, KeyRoutePartPath } from '~/utils';
 
-// import config from '~/config';
-
 const publicRoutes = [
     {
         path: KeyRouteFullPath('home'),
@@ -12,12 +10,12 @@ const publicRoutes = [
     {
         path: KeyRouteFullPath('projects'),
         Component: lazy(() => import('~/pages/Projects')),
-        insideRoute: [
-            {
-                path: KeyRoutePartPath('form'),
-                Component: lazy(() => import('~/pages/Projects/Form')),
-            },
-        ],
+        // insideRoute: [
+        //     {
+        //         path: KeyRoutePartPath('form'),
+        //         Component: lazy(() => import('~/pages/Projects/Form')),
+        //     },
+        // ],
     },
     {
         path: KeyRouteFullPath('project'),
