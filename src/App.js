@@ -7,10 +7,41 @@ import { publicRoutes } from './routes';
 import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
+    function RenderChildRoute(insideChildren) {
+        return insideChildren.map((route, index) => {
+            const Page = route.Component;
+            if (route.insideRoute) {
+                return (
+                    <Route
+                        key={index}
+                        path={route.path}
+                        element={
+                            <Suspense fallback={<Loading />}>
+                                <Page />
+                            </Suspense>
+                        }
+                    >
+                        {RenderChildRoute(route.insideRoute)}
+                    </Route>
+                );
+            }
+            return (
+                <Route
+                    key={index}
+                    path={route.path}
+                    element={
+                        <Suspense fallback={<Loading />}>
+                            <Page />
+                        </Suspense>
+                    }
+                />
+            );
+        });
+    }
     return (
         <Suspense fallback={<Loading />}>
             <BrowserRouter>
-                <div classNae="App">
+                <div className="App">
                     <Routes>
                         {publicRoutes.map((route, index) => {
                             let Layout = route.layout;
@@ -19,6 +50,23 @@ function App() {
                                 Layout = Fragment;
                             } else {
                                 Layout = DefaultLayout;
+                            }
+                            if (route.insideRoute) {
+                                return (
+                                    <Route
+                                        key={index}
+                                        path={route.path}
+                                        element={
+                                            <Layout>
+                                                <Suspense fallback={<Loading />}>
+                                                    <Page />
+                                                </Suspense>
+                                            </Layout>
+                                        }
+                                    >
+                                        {RenderChildRoute(route.insideRoute)}
+                                    </Route>
+                                );
                             }
                             return (
                                 <Route
@@ -46,6 +94,7 @@ function App() {
                 </div>
             </BrowserRouter>
         </Suspense>
+        // <div>haha</div>
     );
 }
 

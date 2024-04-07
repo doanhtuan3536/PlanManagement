@@ -1,29 +1,35 @@
 import { lazy } from 'react';
 
-import config from '~/config';
+import { KeyRouteFullPath, KeyRoutePartPath } from '~/utils';
 
-// import Home from '~/pages/Home';
-// import Login from '~/pages/Login';
-// import Project from '~/pages/Project';
-// import Projects from '~/pages/Projects';
+// import config from '~/config';
+
 const publicRoutes = [
     {
-        path: config.routes.home,
+        path: KeyRouteFullPath('home'),
         Component: lazy(() => import('~/pages/Home')),
     },
     {
-        path: config.routes.projects,
+        path: KeyRouteFullPath('projects'),
         Component: lazy(() => import('~/pages/Projects')),
+        insideRoute: [
+            {
+                path: KeyRoutePartPath('form'),
+                Component: lazy(() => import('~/pages/Projects/Form')),
+            },
+        ],
     },
     {
-        path: config.routes.project,
+        path: KeyRouteFullPath('project'),
         Component: lazy(() => import('~/pages/Project')),
     },
     {
-        path: config.routes.login,
+        path: KeyRouteFullPath('login'),
         Component: lazy(() => import('~/pages/Login')),
     },
 ];
+
+console.log(publicRoutes);
 
 const privateRoutes = [];
 

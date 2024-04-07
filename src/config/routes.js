@@ -1,7 +1,23 @@
 const routes = {
-    home: '/home',
-    projects: '/projects',
-    project: '/projects/:name',
-    login: '/login',
+    home: {
+        path: '/home',
+    },
+    projects: {
+        path: '/projects',
+        children: {
+            project: {
+                path: '/:name',
+            },
+            form: {
+                path: 'form',
+            },
+        },
+    },
+    login: {
+        path: '/login',
+    },
+    signup: {
+        path: '/signup',
+    },
 };
 export default routes;
