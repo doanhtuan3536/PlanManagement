@@ -1,25 +1,27 @@
+import { lazy } from 'react';
+
 import config from '~/config';
 
-import Home from '~/pages/Home';
-import Login from '~/pages/Login';
-import Project from '~/pages/Project';
-import Projects from '~/pages/Projects';
+// import Home from '~/pages/Home';
+// import Login from '~/pages/Login';
+// import Project from '~/pages/Project';
+// import Projects from '~/pages/Projects';
 const publicRoutes = [
     {
         path: config.routes.home,
-        Component: Home,
+        Component: lazy(() => import('~/pages/Home')),
     },
     {
         path: config.routes.projects,
-        Component: Projects,
+        Component: lazy(() => import('~/pages/Projects')),
     },
     {
         path: config.routes.project,
-        Component: Project,
+        Component: lazy(() => import('~/pages/Project')),
     },
     {
         path: config.routes.login,
-        Component: Login,
+        Component: lazy(() => import('~/pages/Login')),
     },
 ];
 
