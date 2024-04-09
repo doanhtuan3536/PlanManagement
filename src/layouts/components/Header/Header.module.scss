@@ -1,5 +1,6 @@
 :root {
-    --space-between-link: 35px;
+    --space-between-link: 50px;
+    --space-between-link-user-aciton: 30px;
 }
 
 .wrapper {
@@ -23,24 +24,35 @@
             .navbar-list-link {
                 color: var(--black-color);
                 text-decoration: none;
+                line-height: 2;
+                display: inline-block;
+                &.active::before {
+                    transform: scaleX(1);
+                }
+                &.active {
+                    color: var(--primary-color);
+                }
+            }
+        }
+        &.navbar-user-actions {
+            gap: var(--space-between-link-user-aciton);
+            .has-line-separator::after {
+                right: calc(-1 * (var(--space-between-link-user-aciton) / 2));
             }
         }
     }
     .main-navbar-list-items {
-        .navbar-list-item::before {
+        .navbar-list-link::before {
             content: '';
             position: absolute;
             border: 2px solid var(--primary-color);
             width: 100%;
-            bottom: -15px;
+            bottom: -6px;
             transform: scaleX(0);
-            transition: transform 0.2s ease-out;
-            .active {
-                transform: scaleX(1);
-            }
+            transition: transform 0.3s ease-out;
         }
 
-        .navbar-list-item:hover::before {
+        .navbar-list-link:hover::before {
             transform: scaleX(1);
         }
     }
@@ -50,8 +62,29 @@
     content: '';
     position: absolute;
     border: 1px solid rgba(0, 0, 0, 0.356);
-    height: 70%;
+    height: 40%;
     top: 50%;
     transform: translate(-50%, -50%);
     right: calc(-1 * (var(--space-between-link) / 2));
+}
+
+.drop-down-menu {
+    margin-top: 4px;
+    min-width: 200%;
+    // max-width: 250%;
+    color: var(--black-color);
+}
+
+.navbar-logo {
+    width: 125px;
+    display: inline-block;
+    display: flex;
+    align-items: center;
+    .navbar-logo-image {
+        width: 100%;
+    }
+}
+
+.drop-down-menu-wrapper {
+    padding: 10px;
 }

@@ -25,6 +25,10 @@ const publicRoutes = [
         path: KeyRouteFullPath('login'),
         Component: lazy(() => import('~/pages/Login')),
     },
+    {
+        path: KeyRouteFullPath('signup'),
+        Component: lazy(() => import('~/pages/Signup')),
+    },
 ];
 
 console.log(publicRoutes);
