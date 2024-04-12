@@ -1,6 +1,7 @@
 :root {
     --space-between-link: 50px;
-    --space-between-link-user-aciton: 30px;
+    --space-between-link-user-action: 30px;
+    --background-link-dropdown-hover: #091e420f;
 }
 
 .wrapper {
@@ -35,9 +36,9 @@
             }
         }
         &.navbar-user-actions {
-            gap: var(--space-between-link-user-aciton);
+            gap: var(--space-between-link-user-action);
             .has-line-separator::after {
-                right: calc(-1 * (var(--space-between-link-user-aciton) / 2));
+                right: calc(-1 * (var(--space-between-link-user-action) / 2));
             }
         }
     }
@@ -46,8 +47,9 @@
             content: '';
             position: absolute;
             border: 2px solid var(--primary-color);
+            // padding: 2px;
             width: 100%;
-            bottom: -6px;
+            bottom: -1px;
             transform: scaleX(0);
             transition: transform 0.3s ease-out;
         }
@@ -69,10 +71,18 @@
 }
 
 .drop-down-menu {
-    margin-top: 4px;
-    min-width: 200%;
-    // max-width: 250%;
+    margin-top: 1px;
+    min-width: 270px;
+    max-width: 350px;
     color: var(--black-color);
+}
+
+.drop-down-menu::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    border: 10px solid transparent;
+    top: -10px;
 }
 
 .navbar-logo {
@@ -87,4 +97,35 @@
 
 .drop-down-menu-wrapper {
     padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+// .drop-down-menu__link {
+//     color: var(--black-color);
+//     font-size: 1.4rem;
+//     text-decoration: none;
+//     // display: inline-block;
+//     padding: 0.6em;
+//     font-weight: 400;
+//     &:hover {
+//         background-color: var(--background-link-dropdown-hover);
+//     }
+// }
+
+.drop-down-menu__header {
+    font-size: 1.4rem;
+    padding: 0.6em 1em;
+    font-weight: 700;
+    pointer-events: none;
+}
+
+.line-separator {
+    border-top: 1px solid rgba(22, 24, 35, 0.151);
+}
+
+.navbar-list-link:has(~ div .drop-down-menu:hover) {
+    &::before {
+        transform: scaleX(1);
+    }
 }

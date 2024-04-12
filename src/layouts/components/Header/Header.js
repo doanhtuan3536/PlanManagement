@@ -8,11 +8,40 @@ import { KeyRouteFullPath } from '~/utils';
 import Button from '../Button';
 import images from '~/assets/images';
 import Image from '~/components/Image';
+import LinkProjectDropDown from './LinkProjectDropDown';
 
 import styles from './Header.module.scss';
 // import config from '~/config';
 const cx = classNames.bind(styles);
-const mainNavbarLink = ['home', 'projects'];
+const dropDownProjects = {
+    ListProjects: {
+        title: 'Your projects',
+        children: [
+            {
+                id: 1,
+                name: 'Todo 1',
+                type: 'TodoList',
+            },
+            {
+                id: 2,
+                name: 'Project 1',
+                type: 'Project',
+            },
+        ],
+    },
+    listLink: {
+        children: [
+            {
+                name: 'View all projects',
+                to: KeyRouteFullPath('projects'),
+            },
+            {
+                name: 'New project',
+                to: KeyRouteFullPath('create'),
+            },
+        ],
+    },
+};
 function Header() {
     const config = { tension: 300, friction: 15, duration: 200 };
     const initialStyles = { opacity: 0 };
@@ -40,20 +69,6 @@ function Header() {
                         <Image className={cx('navbar-logo-image')} src={images.myLogo} alt={'my logo'} />
                     </Link>
                     <ul className={cx('navbar-list-items', 'main-navbar-list-items')}>
-                        {/* {mainNavbarLink.map((link, index) => {
-                            return (
-                                <li key={index} className={cx('navbar-list-item')}>
-                                    <NavLink
-                                        className={({ isActive }) => {
-                                            return isActive ? cx('navbar-list-link', 'active') : cx('navbar-list-link');
-                                        }}
-                                        to={KeyRouteFullPath(link)}
-                                    >
-                                        {link.charAt(0).toUpperCase() + link.slice(1)}
-                                    </NavLink>
-                                </li>
-                            );
-                        })} */}
                         <li className={cx('navbar-list-item')}>
                             <NavLink
                                 className={({ isActive }) => {
@@ -67,7 +82,6 @@ function Header() {
                         <li className={cx('navbar-list-item')}>
                             <Tippy
                                 interactive
-                                // interactiveBorder={10}
                                 delay={[100, 0]}
                                 placement="bottom-start"
                                 render={(attrs) => (
@@ -78,17 +92,43 @@ function Header() {
                                         {...attrs}
                                     >
                                         <TippyWrapper {...attrs}>
-                                            <div className={cx('drop-down-menu-wrapper')}>
-                                                {' '}
-                                                Helloo ngu qua di thag ngu
-                                            </div>
+                                            <>
+                                                {Object.keys(dropDownProjects).map((header, index) => {
+                                                    return (
+                                                        <>
+                                                            {index > 0 && <div className={cx('line-separator')}></div>}
+                                                            {dropDownProjects[header].title && (
+                                                                <span className={cx('drop-down-menu__header')}>
+                                                                    {dropDownProjects[header].title}
+                                                                </span>
+                                                            )}
+                                                            {dropDownProjects[header].children &&
+                                                                dropDownProjects[header].children.map((link, index) => {
+                                                                    return (
+                                                                        <LinkProjectDropDown
+                                                                            key={link.id}
+                                                                            className={cx('drop-down-menu__link')}
+                                                                            to={
+                                                                                KeyRouteFullPath('projects') +
+                                                                                `/${link.id}`
+                                                                            }
+                                                                            dataItem={link}
+                                                                        >
+                                                                            {link.name}
+                                                                        </LinkProjectDropDown>
+                                                                    );
+                                                                })}
+                                                        </>
+                                                    );
+                                                })}
+                                            </>
                                         </TippyWrapper>
                                     </animated.div>
                                 )}
                                 animation={true}
                                 onMount={onMount}
                                 onHide={onHide}
-                                appendTo={(reference) => reference}
+                                // appendTo={(reference) => reference}
                             >
                                 <NavLink
                                     className={({ isActive }) => {
@@ -100,7 +140,9 @@ function Header() {
                                 </NavLink>
                             </Tippy>
                         </li>
-                        <Button primary>Create</Button>
+                        <Button primary to={KeyRouteFullPath('create')}>
+                            Create
+                        </Button>
                     </ul>
                     <ul className={cx('navbar-list-items', 'navbar-user-actions')}>
                         <li className={cx('navbar-list-item', 'has-line-separator')}>

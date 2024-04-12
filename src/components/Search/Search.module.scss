@@ -1,0 +1,55 @@
+:root {
+    --height-default: 40px;
+    --font-size-search-default: 1.7rem;
+}
+
+.wrapper {
+    height: var(--height-default);
+    display: flex;
+    align-items: center;
+    font-size: var(--font-size-search-default);
+    border: 1px solid rgb(133, 144, 162);
+    position: relative;
+    padding-right: 35px;
+    // border-radius: 20px;
+}
+.wrapper:focus-within {
+    border-color: var(--primary-color);
+    border-width: 2px;
+}
+.input {
+    border: none;
+    height: 100%;
+    outline: none;
+    // outline: rgb(133, 144, 162);
+}
+// .icon {
+//     color: rgb(148, 147, 147);
+// }
+.seach-icon {
+    // font-size: var(--font-size-normal);
+    padding: 10px;
+    color: rgb(148, 147, 147);
+}
+
+.spinner-icon,
+.x-icon {
+    position: absolute;
+    right: 10px;
+    color: var(--black-color);
+}
+
+.search-icon-wrapper:has(~ .input:focus) {
+    .seach-icon {
+        color: var(--black-color);
+    }
+}
+
+@keyframes rotate {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

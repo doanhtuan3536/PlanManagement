@@ -1,0 +1,26 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: var(--black-color);
+    font-size: 1.4rem;
+    text-decoration: none;
+    padding: 1em;
+    font-weight: 500;
+    &:hover {
+        background-color: var(--background-link-dropdown-hover);
+    }
+}
+.Link-img {
+    width: 40px;
+}
+
+.Link-type {
+    margin-left: auto;
+    font-weight: 300;
+}
+
+.Link-name {
+    color: var(--black-color);
+    // font-weight: 500;
+}

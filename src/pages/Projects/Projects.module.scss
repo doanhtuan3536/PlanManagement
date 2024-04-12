@@ -1,0 +1,48 @@
+:root {
+    --font-size-header-table: 1.5rem;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+}
+
+.table-list-projects {
+    width: 100%;
+    table-layout: fixed;
+    text-align: left;
+    border-collapse: collapse;
+    .table-list-projects_headers {
+        font-size: var(--font-size-header-table);
+        border-bottom: 2px solid #091e420f;
+        // font-weight: 300;
+    }
+    .table-list-projects_items {
+        font-size: var(--font-size-normal);
+        tr:hover {
+            background-color: var(--background-link-dropdown-hover);
+            cursor: pointer;
+        }
+    }
+    th,
+    td {
+        padding: 10px;
+        // margin: 0;
+    }
+    th {
+        font-weight: 600;
+    }
+    th:first-child {
+        width: 75px;
+    }
+    td {
+        font-weight: 400;
+    }
+}
+
+.header {
+    font-size: 2rem;
+    font-weight: 700;
+}

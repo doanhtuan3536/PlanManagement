@@ -13,6 +13,9 @@ const routes = {
             // },
         },
     },
+    create: {
+        path: '/create',
+    },
     login: {
         path: '/login',
     },

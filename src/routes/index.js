@@ -22,6 +22,10 @@ const publicRoutes = [
         Component: lazy(() => import('~/pages/Project')),
     },
     {
+        path: KeyRouteFullPath('create'),
+        Component: lazy(() => import('~/pages/CreateForm')),
+    },
+    {
         path: KeyRouteFullPath('login'),
         Component: lazy(() => import('~/pages/Login')),
     },
