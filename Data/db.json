@@ -1,0 +1,20 @@
+{
+    "projects": [
+        {
+            "id": 1,
+            "name": "Todo 1",
+            "type": "TodoList",
+            "CreatedAt": "12-03-2024",
+            "AmountTasks": 10,
+            "AmountTasksDone": 5
+        },
+        {
+            "id": 2,
+            "name": "Todo 2",
+            "type": "TodoList",
+            "CreatedAt": "12-04-2024",
+            "AmountTasks": 14,
+            "AmountTasksDone": 6
+        }
+    ]
+}

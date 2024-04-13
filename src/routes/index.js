@@ -12,10 +12,14 @@ const publicRoutes = [
         Component: lazy(() => import('~/pages/Projects')),
         // insideRoute: [
         //     {
-        //         path: KeyRoutePartPath('form'),
-        //         Component: lazy(() => import('~/pages/Projects/Form')),
+        //         path: KeyRoutePartPath('trash'),
+        //         Component: lazy(() => import('~/pages/Trash')),
         //     },
         // ],
+    },
+    {
+        path: KeyRouteFullPath('trash'),
+        Component: lazy(() => import('~/pages/Trash')),
     },
     {
         path: KeyRouteFullPath('project'),

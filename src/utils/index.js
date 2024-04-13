@@ -10,10 +10,13 @@ function findRoute(routeObject, name, path, fullPath = true) {
                 name: keyRoute,
                 children: routeObject.children[keyRoute].children,
             };
+            let pathChild = routeObject.children[keyRoute].path;
             let route = findRoute(
                 newRouteObject,
                 name,
-                fullPath ? path + routeObject.children[keyRoute].path : routeObject.children[keyRoute].path,
+                fullPath
+                    ? path + (routeObject.children[keyRoute].path.startsWith('/') ? pathChild : '/' + pathChild)
+                    : routeObject.children[keyRoute].path,
                 fullPath,
             );
             if (route) {

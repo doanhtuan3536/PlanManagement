@@ -8,9 +8,9 @@ const routes = {
             project: {
                 path: '/:name',
             },
-            // form: {
-            //     path: 'form',
-            // },
+            trash: {
+                path: 'trash',
+            },
         },
     },
     create: {

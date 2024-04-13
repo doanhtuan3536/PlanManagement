@@ -38,6 +38,14 @@
     right: 10px;
     color: var(--black-color);
 }
+.x-icon {
+    cursor: pointer;
+    color: rgb(148, 147, 147);
+}
+
+.input:focus ~ .x-icon {
+    color: var(--black-color);
+}
 
 .search-icon-wrapper:has(~ .input:focus) {
     .seach-icon {

@@ -39,6 +39,10 @@ const dropDownProjects = {
                 name: 'New project',
                 to: KeyRouteFullPath('create'),
             },
+            {
+                name: 'Your trash',
+                to: KeyRouteFullPath('trash'),
+            },
         ],
     },
 };
