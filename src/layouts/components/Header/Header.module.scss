@@ -54,9 +54,9 @@
             transition: transform 0.3s ease-out;
         }
 
-        .navbar-list-link:hover::before {
-            transform: scaleX(1);
-        }
+        // .navbar-list-link:hover::before {
+        //     transform: scaleX(1);
+        // }
     }
 }
 

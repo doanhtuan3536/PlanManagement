@@ -6,7 +6,7 @@ import { faTrash, faPenToSquare, faEllipsis } from '@fortawesome/free-solid-svg-
 import Tippy from '@tippyjs/react';
 
 import { KeyRouteFullPath } from '~/utils';
-import Button from '~/layouts/components/Button';
+import Button from '~/components/Button';
 import Search from '~/components/Search';
 import styles from './Projects.module.scss';
 const cx = classNames.bind(styles);
@@ -44,13 +44,26 @@ function Projects() {
                     <Select
                         options={options}
                         placeholder={'Choose type'}
-                        className={cx('select-type')}
+                        className={cx('select-type-container')}
+                        // classNamePrefix= {cx('select-type')}
+                        // classNames={{
+                        //     control: (state) =>
+                        //     state.isFocused ? cx('select-type-control') : cx('select-type-control'),
+                        // }}
                         styles={{
                             control: (baseStyles, state) => ({
                                 ...baseStyles,
-                                borderColor: 'rgb(133, 144, 162)',
+                                // borderColor: state.isFocused ? 'grey' : 'red',
                                 borderRadius: 'none',
-                                height: '40px',
+                                borderColor: 'transparent',
+                                ':hover': {
+                                    borderColor: 'transparent',
+                                },
+                                // boxShadow: state.isFocused ?  'transparent' : 'transparent'
+                                // borderColor: state.isFocused ?  'transparent' : 'transparent'
+                                // borderWidth: '2px'
+                                // boxShadow: state.isFocused  ? 'rgba(4, 130, 233, 0.897)' : 'none'
+                                // border: state.isFocused ? '2px solid rgb(133, 144, 162)' : '2px solid rgb(133, 144, 162)'
                             }),
                         }}
                     />
@@ -79,7 +92,7 @@ function Projects() {
                             {projects.map((project) => {
                                 return (
                                     // <Link>
-                                    <tr>
+                                    <tr key={project.id}>
                                         <td>{project.id}</td>
                                         <td>
                                             <Link
@@ -93,6 +106,9 @@ function Projects() {
                                         <td>{project.CreatedAt}</td>
                                         <td>
                                             {project.AmountTasks} {`( Done: ${project.AmountTasksDone} )`}
+                                            <div className={cx('progress-bar')}>
+                                                <div className={cx('progress-fill')} style={{ width: '50%' }}></div>
+                                            </div>
                                         </td>
                                         <td className={cx('more-option-cell')}>
                                             <Tippy content="Move to trash">
@@ -120,7 +136,15 @@ function Projects() {
                             })}
                         </tbody>
                     </table>
-                    <div></div>
+                    <div className={cx('pagination')}>
+                        <button className={cx('pagination-btn')}>Previous</button>
+                        <button className={cx('pagination-btn', 'active')}>1</button>
+                        <button className={cx('pagination-btn')}>2</button>
+                        <button className={cx('pagination-btn')}>3</button>
+                        <span>...</span>
+                        <button className={cx('pagination-btn')}>8</button>
+                        <button className={cx('pagination-btn')}>Next</button>
+                    </div>
                 </main>
             </div>
         </div>

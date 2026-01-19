@@ -79,12 +79,27 @@
 .search-section {
     display: flex;
     gap: 30px;
-    .select-type {
+    .select-type-container {
         font-size: 1.7rem;
         width: auto;
         width: 20rem;
         color: var(--black-color);
+        border: 2px solid rgb(133, 144, 162);
     }
+
+    .select-type-container:focus-within{
+        border: 2px solid var(--primary-color);
+    }
+
+    // .select-type-control{
+    //     border: 2px solid rgb(133, 144, 162);
+    // }
+    // .select-type-control:hover{
+    //     border: 2px solid rgb(133, 144, 162);
+    // }
+    // .select-type:hover{
+    //     border-color: none;
+    // }
 }
 
 .button-trash-section {
@@ -101,4 +116,54 @@
         text-decoration: none;
         font-size: var(--font-size-normal);
     }
+}
+
+.progress-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.progress-bar {
+    height: 6px;
+    background-color: #e5e7eb;
+    border-radius: 3px;
+    overflow: hidden;
+    width: 100px;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #10b981;
+    border-radius: 3px;
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.pagination-btn {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    background-color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    color: #4b5563;
+}
+
+.pagination-btn:hover {
+    background-color: #f3f4f6;
+}
+
+.pagination-btn.active {
+    background-color: #4a6cf7;
+    color: white;
+    border-color: #4a6cf7;
 }

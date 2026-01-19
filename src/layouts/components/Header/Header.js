@@ -5,7 +5,7 @@ import { useSpring, animated } from 'react-spring';
 
 import TippyWrapper from '../TippyWrapper';
 import { KeyRouteFullPath } from '~/utils';
-import Button from '../Button';
+import Button from '../../../components/Button';
 import images from '~/assets/images';
 import Image from '~/components/Image';
 import LinkProjectDropDown from './LinkProjectDropDown';
@@ -32,14 +32,17 @@ const dropDownProjects = {
     listLink: {
         children: [
             {
+                id: 1,
                 name: 'View all projects',
                 to: KeyRouteFullPath('projects'),
             },
             {
+                id: 2,
                 name: 'New project',
                 to: KeyRouteFullPath('create'),
             },
             {
+                id: 3,
                 name: 'Your trash',
                 to: KeyRouteFullPath('trash'),
             },
@@ -96,7 +99,6 @@ function Header() {
                                         {...attrs}
                                     >
                                         <TippyWrapper {...attrs}>
-                                            <>
                                                 {Object.keys(dropDownProjects).map((header, index) => {
                                                     return (
                                                         <>
@@ -125,7 +127,7 @@ function Header() {
                                                         </>
                                                     );
                                                 })}
-                                            </>
+                                            
                                         </TippyWrapper>
                                     </animated.div>
                                 )}

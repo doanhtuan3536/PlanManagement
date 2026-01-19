@@ -8,6 +8,10 @@ const publicRoutes = [
         Component: lazy(() => import('~/pages/Home')),
     },
     {
+        path: '/',
+        Component: lazy(() => import('~/pages/Home')),
+    },
+    {
         path: KeyRouteFullPath('projects'),
         Component: lazy(() => import('~/pages/Projects')),
         // insideRoute: [
@@ -31,11 +35,13 @@ const publicRoutes = [
     },
     {
         path: KeyRouteFullPath('login'),
-        Component: lazy(() => import('~/pages/Login')),
+        Component: lazy(() => import('~/pages/Authenications/Login')),
+        layout: null
     },
     {
         path: KeyRouteFullPath('signup'),
-        Component: lazy(() => import('~/pages/Signup')),
+        Component: lazy(() => import('~/pages/Authenications/Signup')),
+        layout: null
     },
 ];
 
