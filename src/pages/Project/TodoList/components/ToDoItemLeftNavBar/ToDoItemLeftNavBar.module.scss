@@ -1,0 +1,82 @@
+.todo-list-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  border-radius: var(--border-radius);
+  border-left: 3px solid transparent;
+  background-color: rgba(255, 255, 255, 0.03);
+  position: relative;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    transform: translateX(3px);
+  }
+  
+  &.active {
+    background-color: rgba(67, 97, 238, 0.15);
+    border-left-color: var(--primary-color);
+  }
+}
+
+.list-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-right: 12px;
+  flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.list-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.list-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.list-stats {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  gap: 8px;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.list-menu-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: var(--transition);
+  flex-shrink: 0;
+  
+  .todo-list-item:hover & {
+    opacity: 1;
+  }
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+}

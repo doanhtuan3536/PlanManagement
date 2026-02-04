@@ -6,7 +6,7 @@ const routes = {
         path: '/projects',
         children: {
             project: {
-                path: '/:name',
+                path: '/:id',
             },
             trash: {
                 path: 'trash',

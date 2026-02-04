@@ -1,0 +1,49 @@
+.settings-section {
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.settings-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.settings-list {
+  list-style: none;
+}
+
+.settings-item {
+  margin-bottom: 8px;
+}
+
+.settings-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  color: var(--sidebar-color);
+  text-decoration: none;
+  transition: var(--transition);
+  border-radius: var(--border-radius);
+  white-space: nowrap;
+  overflow: hidden;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+  }
+}
+
+.settings-icon {
+  font-size: 16px;
+  min-width: 24px;
+  margin-right: 12px;
+}
+
+.sidebar.collapsed .settings-icon {
+  margin-right: 0;
+}

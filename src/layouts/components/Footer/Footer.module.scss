@@ -1,6 +1,7 @@
 footer {
-    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     color: #e2e8f0;
+    font-weight: 500;
     padding: 40px 0 20px;
     margin-top: auto;
     font-size: 1.4rem;

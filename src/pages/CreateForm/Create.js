@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
 import {useState} from 'react'
+import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faCogs, faUsers, faTasks, faArrowLeft, faListCheck, faDiagramProject, faTimes, faPlusCircle, 
     faGripVertical, faUserPlus, faPlus, faCalendarAlt, faClock, faEdit, faTrash, 
@@ -364,7 +365,6 @@ function Create(){
             </div>
         );
     }
-
     return (
         <div className={cx("container")}>
              <div className={cx("page-header")}>

@@ -48,7 +48,7 @@ function App() {
                             const Page = route.Component;
                             if (Layout === null) {
                                 Layout = Fragment;
-                            } else {
+                            } else if(!Layout) {
                                 Layout = DefaultLayout;
                             }
                             if (route.insideRoute) {
@@ -92,6 +92,12 @@ function App() {
                         />
                     </Routes>
                 </div>
+                {/* <div>
+                    <Routes>
+                        <Route path='/projects' element = {<h1>h1h1h1h1h</h1>} />
+                        
+                    </Routes>
+                </div> */}
             </BrowserRouter>
         </Suspense>
         // <div>haha</div>

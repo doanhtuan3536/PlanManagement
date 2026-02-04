@@ -1,4 +1,6 @@
 import { lazy } from 'react';
+import DefaultWithLeftNavBar from '~/layouts/DefaultWithLeftNavBar';
+import HeaderOnly from '~/layouts/HeaderOnly';
 
 import { KeyRouteFullPath, KeyRoutePartPath } from '~/utils';
 
@@ -6,6 +8,7 @@ const publicRoutes = [
     {
         path: KeyRouteFullPath('home'),
         Component: lazy(() => import('~/pages/Home')),
+        layout: DefaultWithLeftNavBar
     },
     {
         path: '/',
@@ -36,16 +39,14 @@ const publicRoutes = [
     {
         path: KeyRouteFullPath('login'),
         Component: lazy(() => import('~/pages/Authenications/Login')),
-        layout: null
+        layout: HeaderOnly
     },
     {
         path: KeyRouteFullPath('signup'),
         Component: lazy(() => import('~/pages/Authenications/Signup')),
-        layout: null
+        layout: HeaderOnly
     },
 ];
-
-console.log(publicRoutes);
 
 const privateRoutes = [];
 

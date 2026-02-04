@@ -8,12 +8,33 @@
 
     --font-size-normal: 1.6rem;
     --font-size-header: 1.9rem;
-    --primary-color: rgba(4, 130, 233, 0.897);
+    --primary-color: rgba(4, 130, 233, 1);
     --min-header-height: 70px;
     --background-link-dropdown-hover: #091e420f;
     --black-color: rgba(0, 0, 0, 0.808);
     --white-color: white;
     --red-color: red;
+    --secondary-color: #3a0ca3;
+    // --primary-color: linear-gradient(250deg, #3a0ca3, var(rgba(4, 130, 233, 1)));
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+    --gray-color: #6c757d;
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
+    --success-color: #4cc9f0;
+    --warning-color: #f72585;
+    --danger-color: #ff4d4d;
+    --sidebar-width: 300px;
+    --sidebar-collapsed-width: 0px;
+    --header-height: 70px;
+    --low-priority: #38b000;
+    --medium-priority: #ffaa00;
+    --high-priority: #ff6d00;
+    --urgent-priority: #d00000;
+    --sidebar-bg: #1a1d29;
+    --sidebar-color: #b0b7c3;
+    --sidebar-active: #4361ee;
+    --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 * {
