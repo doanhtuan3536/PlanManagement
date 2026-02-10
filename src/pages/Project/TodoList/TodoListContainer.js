@@ -4,35 +4,10 @@ import styles from './TodoList.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faTasks,
-    faChevronLeft,
-    faChevronRight,
-    faPlus,
-    faCog,
-    faTags,
-    faBell,
-    faQuestionCircle,
-    faBars,
-    faSearch,
-    faMoon,
-    faSun,
-    faClipboardList,
-    faEdit,
-    faTrash,
-    faEllipsisH,
-    faExclamationTriangle,
-    faCalendar,
-    faCalendarTimes,
-    faClock,
-    faCheck,
-    faSave,
-    faExclamationCircle,
-    faTimes,
-    faChevronDown,
-    faChevronUp,
 } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button';
 import LeftNavbar from '~/layouts/components/LeftNavbar';
-import ToDoItemLeftNavBar from './components/ToDoItemLeftNavBar';
+// import ToDoItemLeftNavBar from './components/ToDoItemLeftNavBar';
 import ListModal from '../ListModal';
 import ContextMenu from './components/ContextMenu';
 import TodoHeader from './TodoListMainContent/TodoHeader';
@@ -43,23 +18,12 @@ import TodoForm from './TodoListMainContent/TodoForm';
 import TodoListMainContent from './TodoListMainContent/TodoListMainContent';
 import Notification from '~/components/Notification';
 import LeftNavbarTodoListContent from './LeftNavbarTodoListContent';
+import useNotification from '~/hooks/useNotification';
+import useLocalStorage from '~/hooks/useLocalStorage';
 
-const cx = classNames.bind(styles);
+// const cx = classNames.bind(styles);
 
-function TodoListContainer() {
-    // State
-    // const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-    const [darkMode, setDarkMode] = useState(false);
-    const [sidebarVisible, setSidebarVisible] = useState(false);
-    const [todos, setTodos] = useState(() => {
-        const saved = localStorage.getItem('todos');
-        return saved ? JSON.parse(saved) : [];
-    });
-    const [todoLists, setTodoLists] = useState(() => {
-        const saved = localStorage.getItem('todoLists');
-        return saved
-            ? JSON.parse(saved)
-            : [
+const DEFAULT_LISTS = [
                   {
                       id: 'default',
                       name: 'General Tasks',
@@ -83,7 +47,12 @@ function TodoListContainer() {
                       stats: { total: 0, pending: 0 },
                   },
               ];
-    });
+
+function TodoListContainer() {
+    const [sidebarVisible, setSidebarVisible] = useState(false);
+    const [todos, setTodos] = useLocalStorage('todos', []);
+    const [todoLists, setTodoLists] = useLocalStorage('todoLists', DEFAULT_LISTS);
+    const [darkMode, setDarkMode] = useLocalStorage('theme', false);
     const [currentListId, setCurrentListId] = useState('default');
     const [currentFilter, setCurrentFilter] = useState('all');
     const [currentSort, setCurrentSort] = useState('priority');
@@ -93,7 +62,9 @@ function TodoListContainer() {
     const [isEditingTodo, setIsEditingTodo] = useState(false);
     const [editingTodoId, setEditingTodoId] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [notification, setNotification] = useState({ show: false, message: '', type: 'danger' });
+    // const [notification, setNotification] = useState({ show: false, message: '', type: 'danger' });
+    const {notification, setNotification, showNotification} = useNotification();
+
     const [showListModal, setShowListModal] = useState(false);
     const [listModalData, setListModalData] = useState({ name: '', color: '#4361ee', isEditing: false });
     const [contextMenu, setContextMenu] = useState({ show: false, listId: null, x: 0, y: 0 });
@@ -123,22 +94,10 @@ function TodoListContainer() {
 
     // Check for overdue todos
     // useEffect(() => {
-    //   // console.log('hihi')
     //   checkOverdueTodos();
     //   const interval = setInterval(checkDeadlineReminders, 60000);
     //   return () => clearInterval(interval);
     // }, [todos]);
-
-    // Close context menu when clicking outside
-    // useEffect(() => {
-    //   const handleClickOutside = (event) => {
-    //     if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
-    //       setContextMenu({ ...contextMenu, show: false });
-    //     }
-    //   };
-    //   document.addEventListener('mousedown', handleClickOutside);
-    //   return () => document.removeEventListener('mousedown', handleClickOutside);
-    // }, [contextMenu]);
 
     // Close sidebar when clicking outside on mobile
     // useEffect(() => {
@@ -162,17 +121,6 @@ function TodoListContainer() {
     //     document.body.classList.remove('dark-mode');
     //   }
     // }, [darkMode]);
-
-    // Helper Functions
-    // const getPriorityText = (priority) => {
-    //     const priorityMap = {
-    //         low: 'Low',
-    //         medium: 'Medium',
-    //         high: 'High',
-    //         urgent: 'Urgent',
-    //     };
-    //     return priorityMap[priority] || priority;
-    // };
 
     const checkTodoStatus = (todo) => {
         if (!todo.deadline || todo.completed) {
@@ -238,13 +186,6 @@ function TodoListContainer() {
         if (dueSoonTodos.length > 0 && !notification.show) {
             showNotification(`You have <strong>${dueSoonTodos.length}</strong> tasks due soon!`, 'warning');
         }
-    };
-
-    const showNotification = (message, type = 'danger') => {
-        setNotification({ show: true, message, type });
-        setTimeout(() => {
-            setNotification({ ...notification, show: false });
-        }, 5000);
     };
 
     // Todo Operations
@@ -463,61 +404,12 @@ function TodoListContainer() {
     const filteredTodos = getFilteredAndSortedTodos();
     const stats = getCurrentListStats();
 
-    // Format deadline display
-    const formatDeadline = (deadline, overdue, dueSoon) => {
-        if (!deadline) return { text: 'No deadline', class: '' };
-
-        const deadlineDate = new Date(deadline);
-        const now = new Date();
-        const timeDiff = deadlineDate.getTime() - now.getTime();
-        const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-        let displayText = '';
-        let displayClass = '';
-
-        if (overdue) {
-            displayText = `Overdue ${Math.abs(dayDiff)} days`;
-            displayClass = 'overdue';
-        } else if (dueSoon) {
-            displayText = 'Due soon';
-            displayClass = 'due-soon';
-        } else if (dayDiff === 0) {
-            displayText = 'Today';
-        } else if (dayDiff === 1) {
-            displayText = 'Tomorrow';
-        } else {
-            displayText = `In ${dayDiff} days`;
-        }
-
-        const formattedDate = deadlineDate.toLocaleDateString('en-US', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-        });
-        displayText += ` (${formattedDate})`;
-
-        return { text: displayText, class: displayClass };
-    };
-
     // Handle key press for todo input
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             addOrUpdateTodo();
         }
     };
-
-    // Handle context menu
-    const handleContextMenu = (e, listId) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setContextMenu({
-            show: true,
-            listId,
-            x: e.clientX,
-            y: e.clientY,
-        });
-    };
-
     // Toggle mobile sidebar
     const toggleMobileSidebar = () => {
         setSidebarVisible(!sidebarVisible);
@@ -539,7 +431,7 @@ function TodoListContainer() {
                 iconHeader={<FontAwesomeIcon icon={faTasks} />}
                 listContent={
                     <LeftNavbarTodoListContent todoLists={todoLists} openListModal={openListModal} 
-                    handleClickTodoItemLeftNavBar={handleClickTodoItemLeftNavBar} handleContextMenu={handleContextMenu} />
+                    handleClickTodoItemLeftNavBar={handleClickTodoItemLeftNavBar} setContextMenu = {setContextMenu} />
                 }
             />
 
@@ -580,7 +472,6 @@ function TodoListContainer() {
                   filteredTodos={filteredTodos}
                   searchTerm={searchTerm}
                   currentFilter={currentFilter}
-                  formatDeadline={formatDeadline}
                   editTodo={editTodo}
                   deleteTodo={deleteTodo}
                   toggleTodoCompletion={toggleTodoCompletion}

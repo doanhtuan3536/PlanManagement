@@ -116,7 +116,7 @@ function Header() {
                                                                             className={cx('drop-down-menu__link')}
                                                                             to={
                                                                                 KeyRouteFullPath('projects') +
-                                                                                `/${link.id}`
+                                                                                `/${link.id}${link.type ? '?type='+ link.type : ''}`
                                                                             }
                                                                             dataItem={link}
                                                                         >

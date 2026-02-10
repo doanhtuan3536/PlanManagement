@@ -1,5 +1,5 @@
 .sidebar {
-  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
   background: linear-gradient(250deg, var(--secondary-color), var(--primary-color));
   color: var(--sidebar-color);
   height: 100vh;
@@ -14,6 +14,7 @@
   overflow-x: hidden;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
 //   opacity: 1;
+  padding-right: 2px;
   transform: translateX(0);
 }
 
@@ -28,7 +29,7 @@
 }
 
 .sidebar-header {
-  padding: 20px;
+  padding: 15px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -82,6 +83,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
@@ -93,7 +95,10 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 20px 0;
+  padding-top: 20px;
+  .sidebar-nav-main-content{
+    flex: 1;
+  }
 }
 
 // .settings-section {

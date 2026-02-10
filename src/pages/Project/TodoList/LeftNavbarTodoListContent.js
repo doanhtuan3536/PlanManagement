@@ -9,7 +9,17 @@ import ToDoItemLeftNavBar from './components/ToDoItemLeftNavBar';
 
 const cx = classNames.bind(styles);
 
-function LeftNavbarTodoListContent({ todoLists, openListModal, handleClickTodoItemLeftNavBar, handleContextMenu}){
+function LeftNavbarTodoListContent({ todoLists, openListModal, handleClickTodoItemLeftNavBar, setContextMenu}){
+    const handleContextMenu = (e, listId) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setContextMenu({
+            show: true,
+            listId,
+            x: e.clientX,
+            y: e.clientY,
+        });
+    };
     return <>
             <div className={cx('section-header')}>
                 <h3 className={cx('section-title')}>My Lists</h3>

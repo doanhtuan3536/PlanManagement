@@ -22,6 +22,9 @@
   &.warning {
     background-color: var(--warning-color);
   }
+  &.success{
+    background-color: var(--success-color);
+  }
 }
 
 // ===== RESPONSIVE STYLES =====

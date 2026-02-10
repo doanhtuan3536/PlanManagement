@@ -52,5 +52,49 @@ function KeyRoutePartPath(name) {
     }
 }
 
+const formatDeadline = (deadline, overdue, dueSoon) => {
+    if (!deadline) return { text: 'No deadline', class: '' };
+
+    const deadlineDate = new Date(deadline);
+    const now = new Date();
+    const timeDiff = deadlineDate.getTime() - now.getTime();
+    const dayDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+    let displayText = '';
+    let displayClass = '';
+
+    if (overdue) {
+        displayText = `Overdue ${Math.abs(dayDiff)} days`;
+        displayClass = 'overdue';
+    } else if (dueSoon) {
+        displayText = 'Due soon';
+        displayClass = 'due-soon';
+    } else if (dayDiff === 0) {
+        displayText = 'Today';
+    } else if (dayDiff === 1) {
+        displayText = 'Tomorrow';
+    } else {
+        displayText = `In ${dayDiff} days`;
+    }
+
+    const formattedDate = deadlineDate.toLocaleDateString('en-US', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+    });
+    displayText += ` (${formattedDate})`;
+
+    return { text: displayText, class: displayClass };
+};
+const getPriorityText = (priority) => {
+        const priorityMap = {
+            low: 'Low',
+            medium: 'Medium',
+            high: 'High',
+            urgent: 'Urgent',
+        };
+        return priorityMap[priority] || priority;
+};
+
 // console.log(KeyRoute('project'));
-export { KeyRouteFullPath, KeyRoutePartPath };
+export { KeyRouteFullPath, KeyRoutePartPath, formatDeadline, getPriorityText};

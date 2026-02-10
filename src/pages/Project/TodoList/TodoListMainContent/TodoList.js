@@ -12,11 +12,12 @@ function TodoList({
     filteredTodos,
     searchTerm,
     currentFilter,
-    formatDeadline,
+    
     editTodo,
     deleteTodo,
     toggleTodoCompletion,
 }) {
+    
     return (
         <div className={cx('todo-list')}>
             {filteredTodos.length === 0 ? (
@@ -43,13 +44,12 @@ function TodoList({
                 </div>
             ) : (
                 filteredTodos.map((todo) => {
-                    const deadlineInfo = formatDeadline(todo.deadline, todo.overdue, todo.dueSoon);
 
                     return (
                         <TodoItem
                             key={todo.id}
                             todo={todo}
-                            deadlineInfo={deadlineInfo}
+                            // deadlineInfo={deadlineInfo}
                             toggleTodoCompletion={toggleTodoCompletion}
                             editTodo={editTodo}
                             deleteTodo={deleteTodo}
