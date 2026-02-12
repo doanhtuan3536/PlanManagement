@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-function useLocalStorage(key, initialValue) {
+function useLocalStorage(key, initialValue, callBackSetItemLocalStorage = null, listDeps = []) {
   const [value, setValue] = useState(() => {
     try {
       const saved = localStorage.getItem(key);
@@ -12,7 +12,9 @@ function useLocalStorage(key, initialValue) {
 
   useEffect(() => {
     localStorage.setItem(key, JSON.stringify(value));
-  }, [key, value]);
+    if(typeof callBackSetItemLocalStorage == "function")
+      callBackSetItemLocalStorage()
+  }, [key, value, ...listDeps]);
 
   return [value, setValue];
 }

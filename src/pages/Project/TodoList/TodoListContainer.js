@@ -50,7 +50,9 @@ const DEFAULT_LISTS = [
 
 function TodoListContainer() {
     const [sidebarVisible, setSidebarVisible] = useState(false);
-    const [todos, setTodos] = useLocalStorage('todos', []);
+    const [todos, setTodos] = useLocalStorage('todos', [], () => {
+        updateAllListStats();
+    });
     const [todoLists, setTodoLists] = useLocalStorage('todoLists', DEFAULT_LISTS);
     const [darkMode, setDarkMode] = useLocalStorage('theme', false);
     const [currentListId, setCurrentListId] = useState('default');
@@ -78,14 +80,14 @@ function TodoListContainer() {
     }, []);
 
     // Save todos and lists to localStorage
-    useEffect(() => {
-        localStorage.setItem('todos', JSON.stringify(todos));
-        updateAllListStats();
-    }, [todos]);
+    // useEffect(() => {
+    //     localStorage.setItem('todos', JSON.stringify(todos));
+    //     updateAllListStats();
+    // }, [todos]);
 
-    useEffect(() => {
-        localStorage.setItem('todoLists', JSON.stringify(todoLists));
-    }, [todoLists]);
+    // useEffect(() => {
+    //     localStorage.setItem('todoLists', JSON.stringify(todoLists));
+    // }, [todoLists]);
 
     // Update list statistics
     useEffect(() => {

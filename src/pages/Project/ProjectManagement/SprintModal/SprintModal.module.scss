@@ -1,0 +1,120 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  &.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+  }
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 30px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-body {
+  padding: 30px;
+}
+
+.modal-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+}
+
+.sprint-modal {
+  background: var(--card-bg);
+  border-radius: 16px;
+  width: 90%;
+  min-width: 600px;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+}
+
+.modal-form {
+  padding: 30px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: var(--font-size-normal);
+    color: var(--text);
+    background: var(--card-bg);
+  }
+
+  textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+}
+.action-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+
+  &:hover {
+    background: var(--primary-dark);
+  }
+}
+
+.btn-sprint {
+  background: var(--sprint);
+  color: white;
+
+  &:hover {
+    background: var(--sprint-dark);
+  }
+}
+
+.btn-secondary {
+  background: var(--card-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+}

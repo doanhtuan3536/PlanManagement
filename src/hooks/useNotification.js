@@ -1,15 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 function useNotification(){
-    const [notification, setNotification] = useState({ show: false, message: '', type: 'danger' });
+      const [notification, setNotification] = useState({
+    show: false,
+    message: '',
+    type: 'danger'
+  });
 
-    const showNotification = (message, type = 'danger') => {
-        setNotification({ show: true, message, type });
-        setTimeout(() => {
-            setNotification({ ...notification, show: false });
-        }, 5000);
+  useEffect(() => {
+    if (!notification.show) return;
+
+    const timeoutId = setTimeout(() => {
+      setNotification(prev => ({ ...prev, show: false }));
+    }, 5000);
+
+    return () => {
+      clearTimeout(timeoutId);
     };
+  }, [notification.show]);
 
-    return {notification, setNotification, showNotification}
+  const showNotification = (message, type = 'danger') => {
+    setNotification({
+      show: true,
+      message,
+      type
+    });
+  };
+
+  return { notification, setNotification, showNotification };
 }
 
 export default useNotification;
