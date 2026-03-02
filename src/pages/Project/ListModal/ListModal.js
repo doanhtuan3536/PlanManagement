@@ -31,23 +31,41 @@ import {
   faChevronUp,
 } from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button';
+import Modal from '~/components/Modal';
 
 const cx = classNames.bind(styles);
 
-function ListModal({setListModalData, setShowListModal, listModalData, onClickBtnSaveList}) {
-    return <div className={cx('modal', 'show')}>
-              <div className={cx('modal-content')}>
-                <div className={cx('modal-header')}>
-                  <h3>{listModalData.isEditing ? 'Edit List' : 'Create New List'}</h3>
-                  <button 
-                    className={cx('close-modal')}
-                    onClick={() => setShowListModal(false)}
-                  >
-                    <FontAwesomeIcon icon={faTimes} />
-                  </button>
-                </div>
-                <div className={cx('modal-body')}>
-                  <div className={cx('form-group')}>
+function ListModal({showListModal, setListModalData, setShowListModal, listModalData, onClickBtnSaveList}) {
+    return <Modal conditionOpen = {showListModal} onClickModalOverlay={setShowListModal} header={
+      <>
+        <h3>{listModalData.isEditing ? 'Edit List' : 'Create New List'}</h3>
+        <button 
+          className={cx('close-modal')}
+          onClick={() => setShowListModal(false)}
+        >
+          <FontAwesomeIcon icon={faTimes} />
+        </button>
+      </>
+    }
+      footer={
+        <>
+          <button 
+            className={cx('btn', 'btn-secondary')}
+            onClick={() => setShowListModal(false)}
+          >
+            Cancel
+          </button>
+          <button 
+            className={cx('btn', 'btn-primary')}
+            onClick={onClickBtnSaveList}
+          >
+            {listModalData.isEditing ? 'Update' : 'Create List'}
+          </button>
+        </>
+      }
+    >
+        <>
+            <div className={cx('form-group')}>
                     <label htmlFor="listName">List Name</label>
                     <input 
                       type="text" 
@@ -57,37 +75,22 @@ function ListModal({setListModalData, setShowListModal, listModalData, onClickBt
                       value={listModalData.name}
                       onChange={(e) => setListModalData({...listModalData, name: e.target.value})}
                     />
-                  </div>
-                  <div className={cx('form-group')}>
-                    <label>Color</label>
-                    <div className={cx('color-picker')}>
-                      {['#4361ee', '#f72585', '#4cc9f0', '#38b000', '#ffaa00', '#9d4edd', '#ff6d00', '#00bbf9'].map(color => (
-                        <div 
-                          key={color}
-                          className={cx('color-option', { selected: listModalData.color === color })}
-                          style={{ backgroundColor: color }}
-                          onClick={() => setListModalData({...listModalData, color})}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <div className={cx('modal-footer')}>
-                  <button 
-                    className={cx('btn', 'btn-secondary')}
-                    onClick={() => setShowListModal(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button 
-                    className={cx('btn', 'btn-primary')}
-                    onClick={onClickBtnSaveList}
-                  >
-                    {listModalData.isEditing ? 'Update' : 'Create List'}
-                  </button>
-                </div>
+            </div>
+            <div className={cx('form-group')}>
+              <label>Color</label>
+              <div className={cx('color-picker')}>
+                {['#4361ee', '#f72585', '#4cc9f0', '#38b000', '#ffaa00', '#9d4edd', '#ff6d00', '#00bbf9'].map(color => (
+                  <div 
+                    key={color}
+                    className={cx('color-option', { selected: listModalData.color === color })}
+                    style={{ backgroundColor: color }}
+                    onClick={() => setListModalData({...listModalData, color})}
+                  />
+                ))}
               </div>
             </div>
+        </>
+    </Modal>
 }
 
 export default ListModal;

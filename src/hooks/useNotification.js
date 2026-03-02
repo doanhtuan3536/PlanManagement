@@ -14,6 +14,7 @@ function useNotification(){
     }, 5000);
 
     return () => {
+      console.log('use effect use notification')
       clearTimeout(timeoutId);
     };
   }, [notification.show]);

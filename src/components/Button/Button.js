@@ -16,7 +16,12 @@ function Button({
     className,
     LinkIcon,
     large,
+    width100 = false,
+    noBorder = false,
+    noHover = false,
     disabled = false,
+    actionBtn = false,
+    sprintBtn = false,
     ...ParaProps
 }) {
     let Comp = 'button';
@@ -44,11 +49,15 @@ function Button({
     const classes = cx('wrapper', {
         primary,
         rounded,
+        width100,
         [className]: className,
         text,
         LinkIcon,
         large,
         outline,
+        actionBtn,
+        sprintBtn,
+        noHover
     });
     return (
         <Comp className={classes} {...props}>

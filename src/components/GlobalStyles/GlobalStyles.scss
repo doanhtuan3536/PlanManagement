@@ -5,7 +5,7 @@
     --animate-fadein: fadein;
     --animate-fadeout: fadeout;
     --font-family: 'Montserrat', sans-serif;
-
+    --font-size-big: 2rem;
     --font-size-normal: 1.6rem;
     --font-size-header: 1.9rem;
     --font-size-small: 1.3rem;
@@ -15,6 +15,7 @@
     --min-header-height: 70px;
     --background-link-dropdown-hover: #091e420f;
     --black-color: rgba(0, 0, 0, 0.808);
+    --grey-color: #ddd;
     --white-color: white;
     --red-color: red;
     --secondary-color: #3a0ca3;
@@ -39,6 +40,10 @@
     --sidebar-color: #b0b7c3;
     --sidebar-active: #4361ee;
     --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --sprint: #8b5cf6;
+    --sprint-dark: #7c3aed;
+    --sprint-bg: #f5f3ff;
+    --sprint-border: #ddd6fe;
 }
 
 * {

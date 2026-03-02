@@ -50,9 +50,10 @@ function TodoForm({
                 />
             </div>
             <Button
-                className={cx('add-btn')}
+                primary
+                actionBtn
                 onClick={addOrUpdateTodo}
-                leftIcon={<FontAwesomeIcon icon={isEditingTodo ? faSave : faPlus} />}
+                leftIcon={<FontAwesomeIcon icon={isEditingTodo ? faSave : faPlus} primary />}
             >
                 {isEditingTodo ? 'Save Changes' : 'Add Task'}
             </Button>

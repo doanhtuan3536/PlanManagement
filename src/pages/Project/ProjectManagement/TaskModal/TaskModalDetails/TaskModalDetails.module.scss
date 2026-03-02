@@ -281,6 +281,81 @@
   // font-size: 0.75rem;
   margin-top: 2px;
 }
+.task-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  font-size: var(--font-size-small);
+  color: var(--text-light);
+}
+
+.task-members {
+  display: flex;
+}
+
+.task-member {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.7rem;
+  margin-left: -8px;
+  border: 2px solid white;
+
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
+.task-timer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.action-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+
+  &:hover {
+    background: var(--primary-dark);
+  }
+}
+
+.btn-sprint {
+  background: var(--sprint);
+  color: white;
+
+  &:hover {
+    background: var(--sprint-dark);
+  }
+}
+
+.btn-secondary {
+  background: var(--card-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
 
 @keyframes fadeIn {
   from {

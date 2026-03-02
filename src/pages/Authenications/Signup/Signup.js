@@ -5,6 +5,7 @@ import { faProjectDiagram, faEye } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle, faFacebookF } from '@fortawesome/free-brands-svg-icons';
 import { Link } from 'react-router-dom';
 import { KeyRouteFullPath } from '~/utils';
+import Button from '~/components/Button';
 
 const cx = classNames.bind(styles);
 
@@ -85,28 +86,53 @@ function Signup() {
             />
           </div>
 
-          <button type="submit" className={cx('btn')} id="registerBtn">
+          {/* <button type="submit" className={cx('btn')} id="registerBtn">
             <span>Signup</span>
-          </button>
+          </button> */}
+          <Button
+            primary
+            width100
+            actionBtn
+            type="submit"
+          >
+            Signup
+          </Button>
+
         </form>
 
         <div className={cx('divider')}>
           <span>Or signup with</span>
         </div>
 
-        <button className={cx('btn', 'btn-google')} id="googleRegisterBtn">
+        {/* <button className={cx('btn', 'btn-google')} id="googleRegisterBtn">
           <FontAwesomeIcon icon={faGoogle} />
           <span>Google</span>
-        </button>
+        </button> */}
+        <Button
+          className={cx('btn-facebook')}
+          width100
+          actionBtn
+          leftIcon={<FontAwesomeIcon icon={faFacebookF} />}
+        >
+          Facebook
+        </Button>
+        <Button
+          primary
+          width100
+          actionBtn
+          leftIcon={<FontAwesomeIcon icon={faGoogle} />}
+        >
+          Google
+        </Button>
 
-        <button
+        {/* <button
           className={cx('btn', 'btn-facebook')}
           id="facebookRegisterBtn"
           style={{ marginTop: '10px' }}
         >
           <FontAwesomeIcon icon={faFacebookF} />
           <span>Facebook</span>
-        </button>
+        </button> */}
 
         {/* <div className={cx('terms')}>
           Bằng việc đăng ký, bạn đồng ý với{' '}

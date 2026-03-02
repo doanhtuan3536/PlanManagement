@@ -488,14 +488,13 @@ function TodoListContainer() {
             )}
 
             {/* List Modal */}
-            {showListModal && (
-                <ListModal
-                    setListModalData={setListModalData}
-                    setShowListModal={setShowListModal}
-                    listModalData={listModalData}
-                    onClickBtnSaveList={saveList}
-                />
-            )}
+            <ListModal
+                showListModal = {showListModal}
+                setListModalData={setListModalData}
+                setShowListModal={setShowListModal}
+                listModalData={listModalData}
+                onClickBtnSaveList={saveList}
+            />
         </>
     );
 }

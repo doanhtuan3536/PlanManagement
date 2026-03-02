@@ -96,5 +96,23 @@ const getPriorityText = (priority) => {
         return priorityMap[priority] || priority;
 };
 
+  const formatTime = (minutes) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = Math.floor(minutes % 60);
+    return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('vi-VN');
+  };
+
+  const formatDateTime = (dateTimeString) => {
+    if (!dateTimeString) return '';
+    const date = new Date(dateTimeString);
+    return date.toLocaleString('vi-VN');
+  };
+
 // console.log(KeyRoute('project'));
-export { KeyRouteFullPath, KeyRoutePartPath, formatDeadline, getPriorityText};
+export { KeyRouteFullPath, KeyRoutePartPath, formatDeadline, getPriorityText, formatTime, formatDate, formatDateTime};

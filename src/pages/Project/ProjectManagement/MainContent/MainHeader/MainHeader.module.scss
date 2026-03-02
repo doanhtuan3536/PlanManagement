@@ -1,0 +1,133 @@
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sprint-selector {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+}
+
+.current-sprint {
+  background: var(--sprint-bg);
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--sprint-border);
+  min-width: 300px;
+}
+
+.sprint-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--font-size-normal);
+  font-weight: 600;
+  color: var(--sprint);
+  margin-bottom: 5px;
+}
+
+.sprint-dates-main {
+  display: flex;
+  gap: 15px;
+  font-size: var(--font-size-small);
+  color: var(--text-light);
+}
+
+.sprint-progress {
+  margin-top: 10px;
+}
+
+.progress-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--sprint), var(--sprint-dark));
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.progress-text-small {
+  font-size: var(--font-size-small);
+  color: var(--text-light);
+  text-align: right;
+}
+
+.view-toggle {
+  display: flex;
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 5px;
+  border: 1px solid var(--border);
+}
+
+.view-btn {
+  padding: 10px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 8px;
+  color: var(--text-light);
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &.active {
+    background: var(--primary-color);
+    color: white;
+  }
+}
+
+.header-actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.action-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+
+  &:hover {
+    background: var(--primary-dark);
+  }
+}
+
+.btn-sprint {
+  background: var(--sprint);
+  color: white;
+
+  &:hover {
+    background: var(--sprint-dark);
+  }
+}
+
+.btn-secondary {
+  background: var(--card-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+}

@@ -34,14 +34,24 @@ import {
   faEye,
   faSpinner,
   faCircle,
-  faSearch,
-  faBell,
   faCheckCircle as faCheckCircleSolid
 } from '@fortawesome/free-solid-svg-icons';
 import LeftNavbar from '~/layouts/components/LeftNavbar';
 import SprintModal from './SprintModal';
 import Notification from '~/components/Notification';
 import useNotification from '~/hooks/useNotification';
+import ProjectInfo from './LeftNavBarComponents/ProjectInfo';
+import SidebarNav from './LeftNavBarComponents/SidebarNav';
+import SprintSidebar from './LeftNavBarComponents/SprintSidebar';
+import { formatDate, formatDateTime, formatTime } from '~/utils';
+import MainHeader from './MainContent/MainHeader';
+import Stats from './MainContent/Stats';
+import GroupChat from './MainContent/GroupChat';
+import LeaderBoard from './MainContent/LeaderBoard';
+import BackLog from './MainContent/BackLog';
+import SprintBoard from './MainContent/SprintBoard';
+import Modal from '~/components/Modal';
+import TaskModalDetails from './TaskModal/TaskModalDetails';
 
 const cx = classNames.bind(styles);
 
@@ -374,24 +384,6 @@ function ProjectManagement() {
   const [draggingTask, setDraggingTask] = useState(null);
   const {notification, setNotification, showNotification} = useNotification();
 
-  // ==================== HELPER FUNCTIONS ====================
-  const formatTime = (minutes) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = Math.floor(minutes % 60);
-    return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) return 'N/A';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('vi-VN');
-  };
-
-  const formatDateTime = (dateTimeString) => {
-    if (!dateTimeString) return '';
-    const date = new Date(dateTimeString);
-    return date.toLocaleString('vi-VN');
-  };
 
   // ==================== SPRINT FUNCTIONS ====================
   const switchSprint = (sprintId) => {
@@ -1073,112 +1065,7 @@ function ProjectManagement() {
     return totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
   };
 
-  // ==================== RENDER FUNCTIONS ====================
-  const renderSprintSidebar = () => {
-    return sprints.map(sprint => {
-      const sprintTasks = tasks.filter(t => t.sprintId === sprint.id);
-      const completedTasks = sprintTasks.filter(t => t.status === 'done').length;
-      const totalTasks = sprintTasks.length;
-      const progress = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
-      
-      return (
-        <div 
-          key={sprint.id}
-          className={cx('sprint-sidebar-item', { active: sprint.id === currentSprintId })}
-          onClick={() => switchSprint(sprint.id)}
-        >
-          <div className={cx('sprint-name')}>{sprint.name}</div>
-          <div className={cx('sprint-dates')}>
-            <span>{formatDate(sprint.startDate)}</span>
-            <span>→</span>
-            <span>{formatDate(sprint.endDate)}</span>
-          </div>
-          <div className={cx('sprint-stats')}>
-            <span>{progress}% hoàn thành</span>
-            <span>{sprint.velocity} pts</span>
-          </div>
-        </div>
-      );
-    });
-  };
-
-  const renderCurrentSprint = () => {
-    const currentSprint = sprints.find(s => s.id === currentSprintId);
-    if (!currentSprint) return null;
-    
-    const progress = calculateProgress();
-    const sprintTasks = tasks.filter(t => t.sprintId === currentSprintId);
-    const completedTasks = sprintTasks.filter(t => t.status === 'done').length;
-    const totalTasks = sprintTasks.length;
-    
-    return (
-      <div className={cx('current-sprint')}>
-        <div className={cx('sprint-title')}>
-          <FontAwesomeIcon icon={faBolt} />
-          <span>{currentSprint.name}</span>
-        </div>
-        <div className={cx('sprint-dates-main')}>
-          <span><FontAwesomeIcon icon={faPlay} /> {formatDate(currentSprint.startDate)}</span>
-          <span><FontAwesomeIcon icon={faFlagCheckered} /> {formatDate(currentSprint.endDate)}</span>
-        </div>
-        <div className={cx('sprint-progress')}>
-          <div className={cx('progress-bar')}>
-            <div className={cx('progress-fill')} style={{ width: `${progress}%` }}></div>
-          </div>
-          <div className={cx('progress-text-small')}>
-            {progress}% hoàn thành ({completedTasks}/{totalTasks} tasks)
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const renderSprintBoard = () => {
-    const columns = [
-      { id: "todo", title: "To Do", icon: faCircle, color: "#4a6cf7" },
-      { id: "progress", title: "In Progress", icon: faSpinner, color: "#f59e0b" },
-      { id: "review", title: "Review", icon: faEye, color: "#8b5cf6" },
-      { id: "done", title: "Done", icon: faCheckCircle, color: "#10b981" }
-    ];
-    
-    return (
-      <div className={cx('sprint-board')}>
-        {columns.map(column => {
-          const columnTasks = tasks.filter(task => 
-            task.sprintId === currentSprintId && task.status === column.id
-          );
-          const totalStoryPoints = columnTasks.reduce((sum, task) => sum + (task.storyPoints || 0), 0);
-          
-          return (
-            <div 
-              key={column.id} 
-              className={cx('sprint-column', `column-${column.id}`)}
-              onDragOver={(e) => handleDragOver(e, column.id)}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(e, column.id)}
-            >
-              <div className={cx('column-header')}>
-                <div className={cx('column-title')}>
-                  <FontAwesomeIcon icon={column.icon} style={{ color: column.color }} />
-                  <span>{column.title}</span>
-                </div>
-                <div className={cx('column-count')}>{columnTasks.length}</div>
-              </div>
-              <div 
-                className={cx('sprint-tasks-container')} 
-                data-status={column.id}
-              >
-                {columnTasks.map(task => renderTaskCard(task))}
-              </div>
-              <div className={cx('column-footer')}>
-                <FontAwesomeIcon icon={faStar} /> {totalStoryPoints} story points
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
+  
 
   const renderTaskCard = (task) => {
     const assigneeAvatars = task.assignees.map(userId => {
@@ -1275,101 +1162,6 @@ function ProjectManagement() {
     );
   };
 
-  const renderBacklogTasks = () => {
-    const unassignedTasks = tasks.filter(t => !t.sprintId);
-    
-    if (unassignedTasks.length === 0) {
-      return (
-        <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-light)' }}>
-          <FontAwesomeIcon icon={faCheckCircle} style={{ fontSize: '3rem', marginBottom: '15px' }} />
-          <h3>Backlog trống!</h3>
-          <p>Tất cả tasks đã được gán vào sprint.</p>
-        </div>
-      );
-    }
-    
-    return unassignedTasks.map(task => {
-      const assigneeNames = task.assignees.map(id => {
-        const user = projectData.members.find(m => m.id === id);
-        return user ? user.name : '';
-      }).filter(name => name).join(', ');
-      
-      return (
-        <div 
-          key={task.id} 
-          className={cx('backlog-task')}
-          onClick={() => openTaskModal(task.id)}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <div>
-              <div style={{ fontWeight: '600' }}>{task.id}: {task.title}</div>
-              <div style={{ color: 'var(--text-light)', fontSize: 'var(--font-size-small)', lineHeight: '2.5rem' }}>
-                {task.description.substring(0, 100)}...
-              </div>
-              <div style={{ display: 'flex', gap: '10px', marginTop: '5px', fontSize: 'var(--font-size-small)' }}>
-                <span className={cx('priority-badge', `priority-${task.priority}`)}>
-                  {task.priority === 'high' ? 'Cao' : task.priority === 'medium' ? 'Trung bình' : 'Thấp'}
-                </span>
-                <span><FontAwesomeIcon icon={faStar} /> {task.storyPoints || 0} points</span>
-                <span><FontAwesomeIcon icon={faClock} /> {task.estimate}</span>
-                {assigneeNames && <span><FontAwesomeIcon icon={faUser} /> {assigneeNames}</span>}
-              </div>
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <button 
-              className={cx('action-btn', 'btn-secondary')}
-              onClick={(e) => {
-                e.stopPropagation();
-                assignToSprint(task.id);
-              }}
-            >
-              <FontAwesomeIcon icon={faPlus} /> Gán sprint
-            </button>
-          </div>
-        </div>
-      );
-    });
-  };
-
-  const renderLeaderboard = () => {
-    const sortedMembers = [...projectData.members].sort((a, b) => b.points - a.points);
-    
-    return sortedMembers.map((member, index) => (
-      <div key={member.id} className={cx('leaderboard-item')}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-          <div className={cx('rank')}>{index + 1}</div>
-          <div className={cx('member-avatar')}>{member.initials}</div>
-          <div>
-            <div style={{ fontWeight: 'bold' }}>{member.name}</div>
-            <div style={{ fontSize: 'var(--font-size-small)', color: 'var(--text-light)' }}>
-              {member.role} • {member.online ? '🟢 Online' : '⚫ Offline'}
-            </div>
-          </div>
-        </div>
-        <div className={cx('points')}>{member.points} điểm</div>
-      </div>
-    ));
-  };
-
-  const renderChatMessages = () => {
-    return chatMessages.map(message => {
-      const user = projectData.members.find(m => m.id === message.userId);
-      if (!user) return null;
-      
-      const isOwn = message.userId === currentUser.id;
-      
-      return (
-        <div key={message.id} className={cx('message', { own: isOwn })}>
-          <div className={cx('message-header')}>
-            <div className={cx('message-sender')}>{user.name}</div>
-            <div className={cx('message-time')}>{formatDateTime(message.time)}</div>
-          </div>
-          <div className={cx('message-content')}>{message.text}</div>
-        </div>
-      );
-    });
-  };
 
   const renderModalTaskDetails = () => {
     if (!modalTaskData) return null;
@@ -1643,7 +1435,6 @@ function ProjectManagement() {
   // ==================== STATS ====================
   const stats = calculateStats();
   const progress = calculateProgress();
-
   return (
     <div className={cx('project-container')}>
       {/* Notification */}
@@ -1655,84 +1446,11 @@ function ProjectManagement() {
       <LeftNavbar headerName={projectData.name} iconHeader={<FontAwesomeIcon icon={faCodeBranch} />}
         listContent={
           <>
-          <div className={cx('project-info')}>
-            <div className={cx('project-meta')}>
-              <div className={cx('meta-item')}>
-                <FontAwesomeIcon icon={faCalendar} />
-                <span>Q2 2024</span>
-              </div>
-              <div className={cx('meta-item')}>
-                <FontAwesomeIcon icon={faUserFriends} />
-                <span>{projectData.members.length} thành viên</span>
-              </div>
-              <div className={cx('meta-item')}>
-                <FontAwesomeIcon icon={faFlag} />
-                <span>{sprints.length} Sprints</span>
-              </div>
-            </div>
-            <div className={cx('progress-ring')}>
-              <svg width="80" height="80">
-                <circle className={cx('ring-circle', 'ring-bg')} cx="40" cy="40" r="36"></circle>
-                <circle 
-                  className={cx('ring-circle', 'ring-progress')} 
-                  cx="40" 
-                  cy="40" 
-                  r="36"
-                  style={{ 
-                    strokeDasharray: 226,
-                    strokeDashoffset: `calc(226 - (226 * ${projectData.progress}) / 100)`
-                  }}
-                ></circle>
-              </svg>
-              <div className={cx('progress-text')}>{projectData.progress}%</div>
-            </div>
-          </div>
+          <ProjectInfo projectData={projectData} sprints={sprints} />
 
-        <div className={cx('sidebar-nav')}>
-          <div 
-            className={cx('nav-item', { active: activeView === 'sprint-board' })}
-            onClick={() => setActiveView('sprint-board')}
-          >
-            <FontAwesomeIcon icon={faColumns} />
-            <span>Sprint Board</span>
-          </div>
-          <div 
-            className={cx('nav-item', { active: activeView === 'sprint-backlog' })}
-            onClick={() => setActiveView('sprint-backlog')}
-          >
-            <FontAwesomeIcon icon={faListCheck} />
-            <span>Backlog</span>
-          </div>
-          <div 
-            className={cx('nav-item', { active: activeView === 'leaderboard' })}
-            onClick={() => setActiveView('leaderboard')}
-          >
-            <FontAwesomeIcon icon={faTrophy} />
-            <span>Leaderboard</span>
-          </div>
-          <div 
-            className={cx('nav-item', { active: activeView === 'group-chat' })}
-            onClick={() => setActiveView('group-chat')}
-          >
-            <FontAwesomeIcon icon={faComments} />
-            <span>Group Chat</span>
-          </div>
-        </div>
+          <SidebarNav activeView={activeView} setActiveView={setActiveView} />
 
-        {/* Sprint Sidebar Section */}
-        <div className={cx('sprint-sidebar')}>
-          <div className={cx('sprint-sidebar-header')}>
-            <h3>🏃‍♂️ Sprints</h3>
-            <span className={cx('sprint-count')}>{sprints.length}</span>
-          </div>
-          <div className={cx('sprint-list')}>
-            {renderSprintSidebar()}
-          </div>
-          <button className={cx('add-sprint-btn')} onClick={openSprintModal}>
-            <FontAwesomeIcon icon={faPlus} />
-            <span>Thêm Sprint mới</span>
-          </button>
-        </div>
+          <SprintSidebar sprints={sprints} tasks={tasks} currentSprintId={currentSprintId} openSprintModal={openSprintModal} switchSprint={switchSprint}/>
           </>
         }
       />
@@ -1742,324 +1460,72 @@ function ProjectManagement() {
       {/* Main Content với Sprint Management */}
       <div className='grid wide'>
         <div className={cx('main-content')}>
-          {/* Header với Sprint Selector */}
-          <div className={cx('main-header')}>
-            <div className={cx('sprint-selector')}>
-              {renderCurrentSprint()}
-              
-              <div className={cx('view-toggle')}>
-                <button 
-                  className={cx('view-btn', { active: activeView === 'sprint-board' })}
-                  onClick={() => setActiveView('sprint-board')}
-                >
-                  <FontAwesomeIcon icon={faColumns} /> Board
-                </button>
-                <button 
-                  className={cx('view-btn', { active: activeView === 'sprint-backlog' })}
-                  onClick={() => setActiveView('sprint-backlog')}
-                >
-                  <FontAwesomeIcon icon={faListCheck} /> Backlog
-                </button>
-                <button 
-                  className={cx('view-btn', { active: activeView === 'leaderboard' })}
-                  onClick={() => setActiveView('leaderboard')}
-                >
-                  <FontAwesomeIcon icon={faTrophy} /> Leaderboard
-                </button>
-                <button 
-                  className={cx('view-btn', { active: activeView === 'group-chat' })}
-                  onClick={() => setActiveView('group-chat')}
-                >
-                  <FontAwesomeIcon icon={faComments} /> Chat
-                </button>
-              </div>
-            </div>
-            
-            <div className={cx('header-actions')}>
-              <button className={cx('action-btn', 'btn-sprint')} onClick={openSprintModal}>
-                <FontAwesomeIcon icon={faPlus} /> Sprint mới
-              </button>
-              <button className={cx('action-btn', 'btn-primary')} onClick={createNewTask}>
-                <FontAwesomeIcon icon={faPlus} /> Task mới
-              </button>
-            </div>
-          </div>
-
-          {/* Stats với Sprint Metrics */}
-          <div className={cx('stats-grid')}>
-            <div className={cx('stat-card', 'sprint')}>
-              <FontAwesomeIcon icon={faBolt} />
-              <div className={cx('stat-number')}>{stats.sprintVelocity}</div>
-              <div className={cx('stat-label')}>Sprint Velocity</div>
-            </div>
-            <div className={cx('stat-card')}>
-              <FontAwesomeIcon icon={faTasks} />
-              <div className={cx('stat-number')}>{stats.totalTasks}</div>
-              <div className={cx('stat-label')}>Tổng tasks</div>
-            </div>
-            <div className={cx('stat-card')}>
-              <FontAwesomeIcon icon={faClock} />
-              <div className={cx('stat-number')}>{formatTime(stats.totalTime)}</div>
-              <div className={cx('stat-label')}>Tổng giờ làm</div>
-            </div>
-            <div className={cx('stat-card')}>
-              <FontAwesomeIcon icon={faAward} />
-              <div className={cx('stat-number')}>{stats.totalPoints.toLocaleString()}</div>
-              <div className={cx('stat-label')}>Tổng điểm</div>
-            </div>
-          </div>
+          <MainHeader sprints={sprints} activeView={activeView} setActiveView={setActiveView} 
+          openSprintModal={openSprintModal} createNewTask={createNewTask} currentSprintId={currentSprintId} calculateProgress={calculateProgress} tasks={tasks}/>
+          <Stats stats={stats} />
 
           {/* Sprint Board View */}
           <div className={cx('view-container', { active: activeView === 'sprint-board' })}>
-            <div className={cx('sprint-management')}>
-              <div className={cx('sprint-header')}>
-                <h2><FontAwesomeIcon icon={faColumns} /> Sprint Board</h2>
-                <div className={cx('sprint-actions')}>
-                  <button className={cx('action-btn', 'btn-sprint')} onClick={completeSprint}>
-                    <FontAwesomeIcon icon={faFlagCheckered} /> Hoàn thành Sprint
-                  </button>
-                </div>
-              </div>
-              
-              <div className={cx('sprint-tabs')}>
-                {sprints.map(sprint => {
-                  const sprintTasks = tasks.filter(t => t.sprintId === sprint.id);
-                  const completedTasks = sprintTasks.filter(t => t.status === 'done').length;
-                  
-                  return (
-                    <button 
-                      key={sprint.id}
-                      className={cx('sprint-tab', { active: sprint.id === currentSprintId })}
-                      onClick={() => switchSprint(sprint.id)}
-                    >
-                      {sprint.status === 'completed' && (
-                        <FontAwesomeIcon icon={faCheckCircle} style={{ color: 'var(--secondary)', marginRight: '5px' }} />
-                      )}
-                      {sprint.status === 'active' && (
-                        <FontAwesomeIcon icon={faBolt} style={{ color: 'var(--warning)', marginRight: '5px' }} />
-                      )}
-                      {sprint.status === 'planned' && (
-                        <FontAwesomeIcon icon={faClock} style={{ color: 'var(--text-light)', marginRight: '5px' }} />
-                      )}
-                      {sprint.name}
-                      <span style={{ marginLeft: '8px', fontSize: 'var(--font-size-small)', background: 'var(--background)', padding: '2px 6px', borderRadius: '10px' }}>
-                        {completedTasks}/{sprintTasks.length}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-              
-              {renderSprintBoard()}
-            </div>
+            <SprintBoard sprints={sprints} handleDragOver={handleDragOver} handleDragLeave={handleDragLeave} 
+            handleDrop={handleDrop} renderTaskCard={renderTaskCard} completeSprint={completeSprint} tasks={tasks} currentSprintId={currentSprintId} switchSprint={switchSprint} />
           </div>
 
           {/* Sprint Backlog View */}
           <div className={cx('view-container', { active: activeView === 'sprint-backlog' })}>
-            <div className={cx('backlog-container')}>
-              <div className={cx('backlog-header')}>
-                <h2><FontAwesomeIcon icon={faListCheck} /> Product Backlog</h2>
-                <div className={cx('backlog-actions')}>
-                  <button className={cx('action-btn', 'btn-primary')} onClick={addBacklogTask}>
-                    <FontAwesomeIcon icon={faPlus} /> Thêm task
-                  </button>
-                </div>
-              </div>
-              
-              <div className={cx('backlog-tasks')}>
-                {renderBacklogTasks()}
-              </div>
-            </div>
+            <BackLog tasks={tasks} addBacklogTask={addBacklogTask} projectData={projectData} openTaskModal={openTaskModal} assignToSprint={assignToSprint} />
           </div>
 
           {/* Leaderboard View */}
           <div className={cx('view-container', { active: activeView === 'leaderboard' })}>
-            <div className={cx('leaderboard')}>
-              <h2><FontAwesomeIcon icon={faTrophy} /> Bảng xếp hạng thành viên</h2>
-              <div id="leaderboardList">
-                {renderLeaderboard()}
-              </div>
-            </div>
+            <LeaderBoard projectData={projectData} />
           </div>
 
           {/* Group Chat View */}
           <div className={cx('view-container', { active: activeView === 'group-chat' })}>
-            <div className={cx('chat-container')}>
-              <div className={cx('chat-header')}>
-                <h2><FontAwesomeIcon icon={faComments} /> Group Chat</h2>
-                <div className={cx('chat-info')}>
-                  <span id="onlineCount">{projectData.members.filter(m => m.online).length}</span> thành viên online
-                </div>
-              </div>
-              <div className={cx('chat-messages')} id="chatMessages">
-                {renderChatMessages()}
-              </div>
-              <div className={cx('chat-input')}>
-                <textarea 
-                  value={chatInput}
-                  onChange={(e) => setChatInput(e.target.value)}
-                  placeholder="Nhập tin nhắn..." 
-                  rows="1"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      sendMessage();
-                    }
-                  }}
-                />
-                <button className={cx('action-btn', 'btn-primary')} onClick={sendMessage}>
-                  <FontAwesomeIcon icon={faPaperPlane} />
-                </button>
-              </div>
-            </div>
+            <GroupChat chatInput={chatInput} setChatInput={setChatInput} projectData={projectData} 
+            sendMessage={sendMessage} currentUser={currentUser} chatMessages={chatMessages} />
           </div>
         </div>
       </div>
 
       {/* Sprint Modal */}
-      {sprintModalOpen && (
-        // <div className={cx('modal-overlay', 'active')} onClick={closeSprintModal}>
-        //   <div className={cx('sprint-modal')} onClick={(e) => e.stopPropagation()}>
-        //     <div className={cx('modal-header')}>
-        //       <h2><FontAwesomeIcon icon={faPlus} /> Tạo Sprint mới</h2>
-        //       <button className={cx('action-btn', 'btn-secondary')} onClick={closeSprintModal}>
-        //         <FontAwesomeIcon icon={faTimes} />
-        //       </button>
-        //     </div>
-        //     <div className={cx('modal-form')}>
-        //       <div className={cx('form-row')}>
-        //         <div className={cx('form-group')}>
-        //           <label htmlFor="sprintName">Tên Sprint *</label>
-        //           <input 
-        //             type="text" 
-        //             id="sprintName"
-        //             value={sprintForm.name}
-        //             onChange={(e) => setSprintForm({...sprintForm, name: e.target.value})}
-        //             placeholder="Ví dụ: Sprint 4: Final Testing" 
-        //             required
-        //           />
-        //         </div>
-        //         <div className={cx('form-group')}>
-        //           <label htmlFor="sprintGoal">Mục tiêu Sprint</label>
-        //           <input 
-        //             type="text" 
-        //             id="sprintGoal"
-        //             value={sprintForm.goal}
-        //             onChange={(e) => setSprintForm({...sprintForm, goal: e.target.value})}
-        //             placeholder="Ví dụ: Hoàn thành testing và deploy"
-        //           />
-        //         </div>
-        //       </div>
-              
-        //       <div className={cx('form-row')}>
-        //         <div className={cx('form-group')}>
-        //           <label htmlFor="sprintStartDate">Ngày bắt đầu *</label>
-        //           <input 
-        //             type="date" 
-        //             id="sprintStartDate"
-        //             value={sprintForm.startDate}
-        //             onChange={(e) => setSprintForm({...sprintForm, startDate: e.target.value})}
-        //             required
-        //           />
-        //         </div>
-        //         <div className={cx('form-group')}>
-        //           <label htmlFor="sprintEndDate">Ngày kết thúc *</label>
-        //           <input 
-        //             type="date" 
-        //             id="sprintEndDate"
-        //             value={sprintForm.endDate}
-        //             onChange={(e) => setSprintForm({...sprintForm, endDate: e.target.value})}
-        //             required
-        //           />
-        //         </div>
-        //       </div>
-              
-        //       <div className={cx('form-row')}>
-        //         <div className={cx('form-group')}>
-        //           <label htmlFor="sprintCapacity">Capacity (giờ)</label>
-        //           <input 
-        //             type="number" 
-        //             id="sprintCapacity"
-        //             value={sprintForm.capacity}
-        //             onChange={(e) => setSprintForm({...sprintForm, capacity: parseInt(e.target.value) || 160})}
-        //             placeholder="Ví dụ: 160" 
-        //             min="0"
-        //           />
-        //         </div>
-        //         <div className={cx('form-group')}>
-        //           <label htmlFor="sprintTargetPoints">Target Points</label>
-        //           <input 
-        //             type="number" 
-        //             id="sprintTargetPoints"
-        //             value={sprintForm.targetPoints}
-        //             onChange={(e) => setSprintForm({...sprintForm, targetPoints: parseInt(e.target.value) || 40})}
-        //             placeholder="Ví dụ: 40" 
-        //             min="0"
-        //           />
-        //         </div>
-        //       </div>
-              
-        //       <div className={cx('form-group')}>
-        //         <label htmlFor="sprintTeam">Thành viên tham gia</label>
-        //         <select 
-        //           id="sprintTeam" 
-        //           multiple 
-        //           style={{ height: '120px' }}
-        //           value={sprintForm.team}
-        //           onChange={(e) => {
-        //             const selectedOptions = Array.from(e.target.selectedOptions).map(option => parseInt(option.value));
-        //             setSprintForm({...sprintForm, team: selectedOptions});
-        //           }}
-        //         >
-        //           {projectData.members.map(member => (
-        //             <option key={member.id} value={member.id}>
-        //               {member.name} ({member.role})
-        //             </option>
-        //           ))}
-        //         </select>
-        //         <small style={{ color: 'var(--text-light)' }}>Giữ Ctrl/Cmd để chọn nhiều thành viên</small>
-        //       </div>
-              
-        //       <div className={cx('form-group')}>
-        //         <label htmlFor="sprintDescription">Mô tả chi tiết</label>
-        //         <textarea 
-        //           id="sprintDescription"
-        //           value={sprintForm.description}
-        //           onChange={(e) => setSprintForm({...sprintForm, description: e.target.value})}
-        //           placeholder="Mô tả chi tiết về sprint, các công việc chính, yêu cầu đặc biệt..."
-        //         />
-        //       </div>
-              
-        //       <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '15px', marginTop: '30px' }}>
-        //         <button className={cx('action-btn', 'btn-secondary')} onClick={closeSprintModal}>
-        //           Hủy
-        //         </button>
-        //         <button className={cx('action-btn', 'btn-sprint')} onClick={createSprint}>
-        //           <FontAwesomeIcon icon={faPlus} /> Tạo Sprint
-        //         </button>
-        //       </div>
-        //     </div>
-        //   </div>
-        // </div>
-        <SprintModal closeSprintModal={closeSprintModal} sprintForm={sprintForm} setSprintForm={setSprintForm} createSprint={createSprint } projectData={projectData}  />
-      )}
+        <SprintModal sprintModalOpen = {sprintModalOpen} closeSprintModal={closeSprintModal} sprintForm={sprintForm} 
+        setSprintForm={setSprintForm} createSprint={createSprint } projectData={projectData}  />
 
       {/* Task Modal */}
-      {taskModalOpen && (
-        <div className={cx('modal-overlay', 'active')} onClick={closeTaskModal}>
-          <div className={cx('task-modal')} onClick={(e) => e.stopPropagation()}>
-            <div className={cx('modal-header')}>
+        <Modal conditionOpen = {taskModalOpen} onClickModalOverlay={closeTaskModal} header={
+          <>
               <h2 id="modalTaskTitle">{modalTaskData?.id}: {modalTaskData?.title}</h2>
               <button className={cx('action-btn', 'btn-secondary')} onClick={closeTaskModal}>
-                <FontAwesomeIcon icon={faTimes} />
+                 <FontAwesomeIcon icon={faTimes} />
               </button>
-            </div>
-            <div className={cx('modal-body')}>
-              {renderModalTaskDetails()}
-            </div>
-          </div>
-        </div>
-      )}
+          </>
+        } >
+            <TaskModalDetails 
+              modalTaskData={modalTaskData}
+              sprints={sprints}
+              toggleSubTaskCompletion={toggleSubTaskCompletion}
+              deleteSubTask={deleteSubTask}
+              addSubTask={addSubTask}
+              showAddSubtaskInput={showAddSubtaskInput}
+              setShowAddSubtaskInput={setShowAddSubtaskInput}
+              subtaskInput={subtaskInput}
+              setSubtaskInput={setSubtaskInput}
+              commentInput={commentInput}
+              setCommentInput={setCommentInput}
+              addComment={addComment}
+              updateTaskStatus={updateTaskStatus}
+              updateTaskPriority={updateTaskPriority}
+              updateTaskSprint={updateTaskSprint}
+              updateTaskStoryPoints={updateTaskStoryPoints}
+              updateTaskDates={updateTaskDates}
+              formatDateTime={formatDateTime}
+              formatTime={formatTime}
+              toggleTimeTracker={toggleTimeTracker}
+              currentTaskId={currentTaskId}
+              projectData={projectData}
+            />
+        </Modal>
       
     </div>
   );

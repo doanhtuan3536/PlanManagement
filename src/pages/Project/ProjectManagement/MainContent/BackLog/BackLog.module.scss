@@ -1,0 +1,59 @@
+.backlog-container {
+  margin-top: 30px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--border);
+}
+
+.backlog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.backlog-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.backlog-task {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 15px;
+  background: var(--background);
+  border-radius: 8px;
+  border-left: 3px solid var(--sprint);
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: var(--sprint-bg);
+    transform: translateX(5px);
+  }
+}
+
+.priority-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: var(--font-size-small);
+  font-weight: 500;
+
+  &.priority-high {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+  }
+
+  &.priority-medium {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+  }
+
+  &.priority-low {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--secondary);
+  }
+}

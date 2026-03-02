@@ -1,0 +1,21 @@
+.sidebar-nav {
+  margin-top: 30px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #cbd5e0;
+
+  &:hover,
+  &.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+}
