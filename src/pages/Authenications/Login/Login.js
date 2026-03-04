@@ -10,11 +10,13 @@ import config from '~/config';
 import authService from '~/services/AuthService';
 import axiosInstance from '~/utils/AxiosConfig';
 import Button from '~/components/Button';
+import { useAuth } from '~/context/AuthContext';
 
 const cx = classNames.bind(styles);
 
 function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     username: '',  // Changed from email to username
     password: ''
@@ -54,13 +56,13 @@ function Login() {
     setError('');
 
     try {
-      const result = await authService.login(formData.username, formData.password);  // Changed from email to username
+      const result = await login(formData.username, formData.password);  // Changed from email to username
       
       if (result.success) {
         // Login successful
         navigate('/home');
       } else {
-        setError(result.error || 'Đăng nhập thất bại');
+        setError(result.error + ". Try again" || 'Đăng nhập thất bại');
       }
     } catch (error) {
       setError('Có lỗi xảy ra, vui lòng thử lại');
@@ -75,13 +77,15 @@ function Login() {
       <div className={cx("login-container")}>
         <div className={cx("logo")}>
           <FontAwesomeIcon icon={faProjectDiagram} />
-          <h1>Tuan</h1>
+          {/* <h1>Tuan</h1> */}
         </div>
 
         <div className={cx("form-container", "active")} id="loginForm">
           <h2 className={cx("form-title")}>Login</h2>
 
-          <div className={cx("alert")} id="loginAlert">
+          <div className={cx("alert", {
+            display: error
+          })} id="loginAlert">
             {error && <span style={{ color: 'red' }}>{error}</span>}
           </div>
 

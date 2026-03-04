@@ -15,7 +15,7 @@
 
 .logo {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .logo i {
@@ -206,8 +206,13 @@
 .alert {
     padding: 12px 15px;
     border-radius: var(--border-radius);
-    margin-bottom: 20px;
-    display: none;
+    // margin-bottom: 20px;
+    display: block;
+    height: 40px;
+    &.display{
+        
+        text-align: center;
+    }
 }
 
 .alert-success {

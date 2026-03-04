@@ -6,13 +6,18 @@ class AuthService {
     this.tokens = {
       opaqueToken: null,
       refreshToken: null,
+      refreshTokenId: null,
       expiresIn: null
     };
+     this.user = null; // Store user info here
     this.refreshPromise = null;
+    this.tokenExpiryTime = null;
+    this.refreshTimer = null;
   }
 
   async login(username, password) {
     try {
+      console.log("login")
       const response = await axiosInstance.post('/api/auth/login', {
         username,
         password
@@ -25,19 +30,22 @@ class AuthService {
         this.tokens = {
           opaqueToken: data.opaqueToken,
           refreshToken: data.refreshToken,
+          refreshTokenId: data.refreshTokenId,
           expiresIn: data.expiresIn
         };
 
         console.log(this.tokens)
 
         // Store user info in memory or context
-        // this.user = {
-        //   username: username,
-        //   // You can extract more info from response if needed
-        // };
+        this.user = {
+          username: username,
+          userId: data.userId,
+          avatar: data.avatar
+          // You can extract more info from response if needed
+        };
 
         // // Calculate token expiry time
-        // this.tokenExpiryTime = Date.now() + (data.expiresIn * 1000);
+        this.tokenExpiryTime = Date.now() + (data.expiresIn * 1000);
 
         // // Schedule token refresh
         // this.scheduleTokenRefresh();
@@ -45,16 +53,31 @@ class AuthService {
         console.log('Login successful, tokens stored in memory');
         return {
           success: true,
+          user: this.user,
           data: data
         };
       }
-    } catch (error) {
+    } 
+    catch (error) {
       console.error('Login failed:', error.response?.data || error.message);
       return {
         success: false,
         error: error.response?.data?.message || 'Login failed'
       };
     }
+  }
+  authStatus() {
+    console.log(this.tokens.opaqueToken)
+    return {
+      isAuthenticated: !!this.tokens.opaqueToken && Date.now() < this.tokenExpiryTime,
+      user: this.user,
+      expiresIn: this.tokenExpiryTime ? Math.floor((this.tokenExpiryTime - Date.now()) / 1000) : 0
+    };
+  }
+
+  // Get user info
+  getUser() {
+    return this.user;
   }
 
   async refreshToken() {
@@ -124,14 +147,23 @@ class AuthService {
     }
   }
 
-  async logout() {
+  async logout(refreshTokenId) {
     try {
-      await axiosInstance.post('/api/auth/logout');
+      await axiosInstance.post('/api/auth/logout', {
+        refreshTokenId
+      });
+      return {
+        success: true
+      };
     } catch (error) {
       console.error('Logout error:', error);
+      return {
+        success: false,
+        error: error.response?.data || error.message
+      };
     } finally {
       this.clearTokens();
-      window.location.href = '/login';
+      // window.location.href = '/login';
     }
   }
 

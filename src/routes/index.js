@@ -14,28 +14,21 @@ const publicRoutes = [
         path: '/',
         Component: lazy(() => import('~/pages/Home')),
     },
-    {
-        path: KeyRouteFullPath('projects'),
-        Component: lazy(() => import('~/pages/Projects')),
-        // insideRoute: [
-        //     {
-        //         path: KeyRoutePartPath('trash'),
-        //         Component: lazy(() => import('~/pages/Trash')),
-        //     },
-        // ],
-    },
-    {
-        path: KeyRouteFullPath('trash'),
-        Component: lazy(() => import('~/pages/Trash')),
-    },
-    {
-        path: KeyRouteFullPath('project'),
-        Component: lazy(() => import('~/pages/Project')),
-    },
-    {
-        path: KeyRouteFullPath('create'),
-        Component: lazy(() => import('~/pages/CreateForm')),
-    },
+    // {
+    //     path: KeyRouteFullPath('projects'),
+    //     Component: lazy(() => import('~/pages/Projects')),
+    //     // insideRoute: [
+    //     //     {
+    //     //         path: KeyRoutePartPath('trash'),
+    //     //         Component: lazy(() => import('~/pages/Trash')),
+    //     //     },
+    //     // ],
+    // },
+    
+    // {
+    //     path: KeyRouteFullPath('create'),
+    //     Component: lazy(() => import('~/pages/CreateForm')),
+    // },
     {
         path: KeyRouteFullPath('login'),
         Component: lazy(() => import('~/pages/Authenications/Login')),
@@ -48,6 +41,30 @@ const publicRoutes = [
     },
 ];
 
-const privateRoutes = [];
+const privateRoutes = [
+    {
+        path: KeyRouteFullPath('projects'),
+        Component: lazy(() => import('~/pages/Projects')),
+        // insideRoute: [
+        //     {
+        //         path: KeyRoutePartPath('trash'),
+        //         Component: lazy(() => import('~/pages/Trash')),
+        //     },
+        // ],
+    },
+    {
+        path: KeyRouteFullPath('create'),
+        Component: lazy(() => import('~/pages/CreateForm')),
+    },
+    {
+        path: KeyRouteFullPath('trash'),
+        Component: lazy(() => import('~/pages/Trash')),
+    },
+    {
+        path: KeyRouteFullPath('project'),
+        Component: lazy(() => import('~/pages/Project')),
+    },
+
+];
 
 export { publicRoutes, privateRoutes };

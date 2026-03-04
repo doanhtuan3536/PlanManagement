@@ -1,5 +1,6 @@
 // src/utils/axiosConfig.js
 import axios from 'axios';
+import authService from '~/services/AuthService';
 
 // Create axios instance with default config
 const axiosInstance = axios.create({
@@ -20,27 +21,28 @@ axiosInstance.interceptors.request.use(
 );
 
 // Response interceptor for handling token refresh
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
+// axiosInstance.interceptors.response.use(
+//   (response) => response,
+//   async (error) => {
+//     console.log("haha")
+//     const originalRequest = error.config;
 
-    // If error is 401 and we haven't tried to refresh yet
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+//     // If error is 401 and we haven't tried to refresh yet
+//     if (error.response?.status === 401 && !originalRequest._retry) {
+//       originalRequest._retry = true;
 
-      try {
-        await authService.refreshToken();
-        return axiosInstance(originalRequest);
-      } catch (refreshError) {
-        // Refresh failed, redirect to login
-        window.location.href = '/login';
-        return Promise.reject(refreshError);
-      }
-    }
+//       try {
+//         await authService.refreshToken();
+//         return axiosInstance(originalRequest);
+//       } catch (refreshError) {
+//         // Refresh failed, redirect to login
+//         window.location.href = '/login';
+//         return Promise.reject(refreshError);
+//       }
+//     }
 
-    return Promise.reject(error);
-  }
-);
+//     return Promise.reject(error);
+//   }
+// );
 
 export default axiosInstance;
