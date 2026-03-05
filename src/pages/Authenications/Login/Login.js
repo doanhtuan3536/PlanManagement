@@ -11,6 +11,8 @@ import authService from '~/services/AuthService';
 import axiosInstance from '~/utils/AxiosConfig';
 import Button from '~/components/Button';
 import { useAuth } from '~/context/AuthContext';
+import useNotification from '~/hooks/useNotification';
+import { useNotificatonContext } from '~/context/NotificationContext';
 
 const cx = classNames.bind(styles);
 
@@ -21,6 +23,7 @@ function Login() {
     username: '',  // Changed from email to username
     password: ''
   });
+  const {showNotification} = useNotificatonContext();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -60,6 +63,7 @@ function Login() {
       
       if (result.success) {
         // Login successful
+        showNotification("Login successfully", "success")
         navigate('/home');
       } else {
         setError(result.error + ". Try again" || 'Đăng nhập thất bại');

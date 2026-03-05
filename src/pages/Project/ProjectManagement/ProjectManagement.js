@@ -52,6 +52,7 @@ import BackLog from './MainContent/BackLog';
 import SprintBoard from './MainContent/SprintBoard';
 import Modal from '~/components/Modal';
 import TaskModalDetails from './TaskModal/TaskModalDetails';
+import { useNotificatonContext } from '~/context/NotificationContext';
 
 const cx = classNames.bind(styles);
 
@@ -382,7 +383,7 @@ function ProjectManagement() {
   const [showAddSubtaskInput, setShowAddSubtaskInput] = useState(false);
   const [modalTaskData, setModalTaskData] = useState(null);
   const [draggingTask, setDraggingTask] = useState(null);
-  const {notification, setNotification, showNotification} = useNotification();
+  const {showNotification} = useNotificatonContext();
 
 
   // ==================== SPRINT FUNCTIONS ====================
@@ -1437,10 +1438,6 @@ function ProjectManagement() {
   const progress = calculateProgress();
   return (
     <div className={cx('project-container')}>
-      {/* Notification */}
-      {notification.show && (
-        <Notification notification={notification} />
-      )}
 
       {/* Sidebar với Sprint Management */}
       <LeftNavbar headerName={projectData.name} iconHeader={<FontAwesomeIcon icon={faCodeBranch} />}

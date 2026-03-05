@@ -4,7 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faExclamationTriangle,
   faCircleCheck,
-  faCircleInfo
+  faCircleInfo,
+  faCircleXmark
 } from '@fortawesome/free-solid-svg-icons';
 const cx = classNames.bind(styles);
 
@@ -14,12 +15,18 @@ const icon = {
     info: <FontAwesomeIcon icon={faCircleInfo} />
 }
 function Notification({
-    notification
+    notification, visible, hideNotification
 }) {
-    return <div className={cx('notification', notification.type, 'show')}>
-                        {icon && icon[notification.type]}
-                        <span dangerouslySetInnerHTML={{ __html: notification.message }} />
-                    </div>;
+    return <div className={cx('notification', notification.type, {
+        show: visible
+    })}>
+        {icon && icon[notification.type]}
+        <span dangerouslySetInnerHTML={{ __html: notification.message }} />
+        <div className={cx("close-icon")} onClick={hideNotification}>
+            <FontAwesomeIcon icon={faCircleXmark} />
+        </div>
+        
+    </div>;
 }
 
 export default Notification;

@@ -1,8 +1,9 @@
 .notification {
   position: fixed;
-  top: 20px;
+  top: var(--min-header-height);
   right: 20px;
   padding: 15px 20px;
+  padding-right: 0px;
   border-radius: var(--border-radius);
   background-color: var(--danger-color);
   color: white;
@@ -27,6 +28,16 @@
   }
   &.info{
     background-color: var(--info-color);
+  }
+  .close-icon{
+    padding-left: 15px;
+    padding-right: 15px;
+    cursor: pointer;
+    transition: var(--transition);
+    &:hover{
+      opacity: 0.5;
+    }
+    
   }
 }
 

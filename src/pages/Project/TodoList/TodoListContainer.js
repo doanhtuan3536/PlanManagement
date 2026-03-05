@@ -20,6 +20,7 @@ import Notification from '~/components/Notification';
 import LeftNavbarTodoListContent from './LeftNavbarTodoListContent';
 import useNotification from '~/hooks/useNotification';
 import useLocalStorage from '~/hooks/useLocalStorage';
+import { useNotificatonContext } from '~/context/NotificationContext';
 
 // const cx = classNames.bind(styles);
 
@@ -64,8 +65,7 @@ function TodoListContainer() {
     const [isEditingTodo, setIsEditingTodo] = useState(false);
     const [editingTodoId, setEditingTodoId] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-    // const [notification, setNotification] = useState({ show: false, message: '', type: 'danger' });
-    const {notification, setNotification, showNotification} = useNotification();
+    const {collapsed: notificationShow ,showNotification} = useNotificatonContext();
 
     const [showListModal, setShowListModal] = useState(false);
     const [listModalData, setListModalData] = useState({ name: '', color: '#4361ee', isEditing: false });
@@ -185,7 +185,7 @@ function TodoListContainer() {
             return hourDiff > 0 && hourDiff <= 3;
         });
 
-        if (dueSoonTodos.length > 0 && !notification.show) {
+        if (dueSoonTodos.length > 0 && !notificationShow) {
             showNotification(`You have <strong>${dueSoonTodos.length}</strong> tasks due soon!`, 'warning');
         }
     };
@@ -481,11 +481,6 @@ function TodoListContainer() {
 
               <TodoFooter />
             </TodoListMainContent>
-
-            {/* Notification */}
-            {notification.show && (
-                <Notification notification = {notification} />
-            )}
 
             {/* List Modal */}
             <ListModal
