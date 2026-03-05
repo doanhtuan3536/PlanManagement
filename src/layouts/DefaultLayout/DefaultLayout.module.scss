@@ -6,4 +6,16 @@
 
 .container{
     flex-grow: 1;
+    height: 100%;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+    position: relative;
+    display: flex;
+    align-items: center; 
+    
+}
+
+.content{
+    width: 100%; 
 }

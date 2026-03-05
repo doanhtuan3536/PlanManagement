@@ -299,10 +299,24 @@
             background-color: #fff5f5;
         }
     }
+    .spinner{
+        width: 20px;
+        height: 20px;
+        border: 3px solid #e0e0e0;
+        border-radius: 50%;
+        border-top-color: var(--primary-color);
+        animation: spin 0.8s linear infinite;
+        padding: 0;
+        // display: ;
+    }
 }
 
 .dropdown-divider {
     height: 1px;
     background-color: #f0f0f0;
     margin: 0.5rem 0;
+}
+
+ @keyframes spin {
+    to { transform: rotate(360deg); }
 }

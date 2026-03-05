@@ -12,7 +12,7 @@ const publicRoutes = [
     },
     {
         path: '/',
-        Component: lazy(() => import('~/pages/Home')),
+        Component: lazy(() => import('~/pages/Loading')),
     },
     // {
     //     path: KeyRouteFullPath('projects'),

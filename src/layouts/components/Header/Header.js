@@ -17,6 +17,8 @@ import authService from '~/services/AuthService';
 import useNotification from '~/hooks/useNotification';
 import Notification from '~/components/Notification';
 import { useNotificatonContext } from '~/context/NotificationContext';
+import { useState } from 'react';
+import Loading from '~/pages/Loading';
 // import config from '~/config';
 const cx = classNames.bind(styles);
 const dropDownProjects = {
@@ -58,6 +60,7 @@ const dropDownProjects = {
 function Header() {
     const navigate = useNavigate();
     const { user } = useAuth();
+    const [loading, setLoading] = useState(false);
     const {showNotification} = useNotificatonContext();
     const config = { tension: 300, friction: 15, duration: 200 };
     const initialStyles = { opacity: 0 };
@@ -69,8 +72,8 @@ function Header() {
         // Your logout logic here
         console.log('Logging out...');
         try {
+            setLoading(true);
             const result = await logout(authService.tokens.refreshTokenId);  // Changed from email to username
-        
             if (result.success) {
                 // Login successful
                 showNotification("Logout successfully", "success")
@@ -83,7 +86,7 @@ function Header() {
             // setError('Có lỗi xảy ra, vui lòng thử lại');
             console.error('Login error:', error);
         } finally {
-            // setLoading(false);
+            setLoading(false);
         }
         // setIsAuthenticated(false);
     };
@@ -104,7 +107,6 @@ function Header() {
     }
     return (
         <header className={cx('wrapper')}>
-           
             <div className="grid wide">
                 <div className={cx('navbar-inner')}>
                     <Link className={cx('navbar-logo')} to={KeyRouteFullPath('home')}>
@@ -246,14 +248,15 @@ function Header() {
                                                 </li>
                                                 <li className={cx('dropdown-divider')}></li>
                                                 <li>
-                                                    <div className={cx('dropdown-item')}>
-                                                    <button className={cx('dropdown-item', 'logout-btn')} onClick={handleLogout}>
-                                                        {/* <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                                                            <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5-5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" fill="currentColor"/>
-                                                        </svg> */}
-                                                        <FontAwesomeIcon icon={faArrowRightFromBracket} />
-                                                    </button>
-                                                        Logout
+                                                    <div className={cx('dropdown-item')} onClick={handleLogout}>
+                                                        {loading ? <span className={cx('spinner', 'dropdown-item')}></span> : <>
+                                                            <button className={cx('dropdown-item', 'logout-btn')} >
+                                                                <FontAwesomeIcon icon={faArrowRightFromBracket} />
+                                                            </button>
+                                                            Logout
+                                                        </>}
+                                                        {/* <span className={cx('spinner', 'dropdown-item')}></span> */}
+                                                        
                                                     </div>
                                                 </li>
                                             </ul>
@@ -282,7 +285,6 @@ function Header() {
                 </div>
             </div>
         </header>
-        // <div>haha</div>
     );
 }
 
