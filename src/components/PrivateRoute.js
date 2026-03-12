@@ -6,7 +6,7 @@ import { KeyRouteFullPath } from '~/utils';
 
 const PrivateRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
-  console.log(isAuthenticated)
+  // console.log(isAuthenticated)
 
   if (loading) {
     return <Loading />;

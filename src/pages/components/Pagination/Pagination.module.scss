@@ -1,0 +1,25 @@
+.pagination-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-top: 1rem;
+    // display: grid;
+    // grid-template-columns: auto 1fr auto;
+    // align-items: center;
+    
+}
+.pages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.9rem;
+    min-width: 220px;
+    // min-width: 150px;
+    
+}
+.page-btn {
+    padding: 0.7rem 1.3rem;
+    // font-size: var(--font-size-small);
+    margin-left: 0 !important;
+}

@@ -13,9 +13,23 @@
     position: relative;
     display: flex;
     align-items: center; 
+    flex-direction: column;
+    margin-bottom: 2.5rem;
     
 }
 
 .content{
     width: 100%; 
+}
+
+.container-header{
+    font-size: var(--font-size-page-header);
+    font-weight: 600;
+    color: #0f2b45;
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+    width: var(--wide-content);
+    // margin-bottom: 2.5rem;
+    margin: 2.5rem auto
 }

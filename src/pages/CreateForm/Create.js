@@ -1,10 +1,11 @@
 import classNames from 'classnames/bind';
 import {useState} from 'react'
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faCogs, faUsers, faTasks, faArrowLeft, faListCheck, faDiagramProject, faTimes, faPlusCircle, 
     faGripVertical, faUserPlus, faPlus, faCalendarAlt, faClock, faEdit, faTrash, 
-    faXmark} from '@fortawesome/free-solid-svg-icons';
+    faXmark,
+    faHandHoldingDollar} from '@fortawesome/free-solid-svg-icons';
 import Button from '~/components/Button'
 
 import styles from './Create.module.scss';
@@ -26,11 +27,19 @@ const typeProject = [
         description: 'Manage projects with teams, tasks, and workflows',
         icon: <FontAwesomeIcon icon = {faDiagramProject} />,
         dataType: 'project'
+    },
+    {
+        id: 3,
+        name: 'Money Management',
+        description: 'Manage your money',
+        icon: <FontAwesomeIcon icon = {faHandHoldingDollar} />,
+        dataType: 'money'
     }
 ]
 
 function Create(){
     const [activeTab, setActiveTab] = useState('basic');
+    const navigate = useNavigate(); 
     //input basic form
     const [projectInfo, setprojectInfo] = useState(() =>{
         const start = new Date();
@@ -367,347 +376,349 @@ function Create(){
     }
     return (
         <div className={cx("container")}>
-             <div className={cx("page-header")}>
-                 <div className={cx("page-title")}>
-                     <Button primary leftIcon = {<FontAwesomeIcon icon = {faArrowLeft} />}>
-                        Back
-                     </Button>
-                     <h1>Create New Project</h1>
-                 </div>
+            <div className='grid wide'>
+                <div className={cx("page-header")}>
+                    <div className={cx("page-title")}>
+                        <Button primary leftIcon = {<FontAwesomeIcon icon = {faArrowLeft} />} onClick={() => navigate(-1)}>
+                            Back
+                        </Button>
+                    </div>
 
-             </div>
+                </div>
 
-             {/* <!-- Form Container --> */}
-             <div className={cx("form-container")}>
-                 {/* <!-- Form Tabs --> */}
-                 <div className={cx("form-tabs")}>
+                {/* <!-- Form Container --> */}
+                <div className={cx("form-container")}>
+                    {/* <!-- Form Tabs --> */}
+                    <div className={cx("form-tabs")}>
 
-                     {[
-                         { id: 'basic', icon: faInfoCircle, label: 'Basic Information' },
-                         { id: 'details', icon: faCogs, label: 'Project Details' },
-                         { id: 'members', icon: faUsers, label: 'Members' },
-                         { id: 'tasks', icon: faTasks, label: 'Tasks' }
-                     ].map(tab => (
-                         <button
-                         key={tab.id}
-                         className={`${cx('tab-btn')} ${activeTab === tab.id ? cx('active') : ''} ${projectInfo.projectType === 1 & tab.id !== 'basic' ? cx('disabled') : ''}`}
-                         onClick={() => setActiveTab(projectInfo.projectType !== 1 ? tab.id : activeTab)}
-                         disabled={projectInfo.projectType === 1 && tab.id !== 'basic'}
-                         >
-                         <FontAwesomeIcon icon = {tab.icon} /> {tab.label}
-                         </button>
-                     ))}
-                 </div>
+                        {[
+                            { id: 'basic', icon: faInfoCircle, label: 'Basic Information' },
+                            { id: 'details', icon: faCogs, label: 'Project Details' },
+                            { id: 'members', icon: faUsers, label: 'Members' },
+                            { id: 'tasks', icon: faTasks, label: 'Tasks' }
+                        ].map(tab => (
+                            <button
+                            key={tab.id}
+                            className={`${cx('tab-btn')} ${activeTab === tab.id ? cx('active') : ''} ${projectInfo.projectType !== 2 && tab.id !== 'basic' ? cx('disabled') : ''}`}
+                            onClick={() => setActiveTab(projectInfo.projectType !== 1 ? tab.id : activeTab)}
+                            disabled={projectInfo.projectType !== 2 && tab.id !== 'basic'}
+                            >
+                            <FontAwesomeIcon icon = {tab.icon} /> {tab.label}
+                            </button>
+                        ))}
+                    </div>
 
-                 {/* <!-- Form Content --> */}
-                 <div className={cx("form-content")}>
-                     {/* <!-- Basic Information Tab --> */}
-                     {activeTab === "basic" &&
-                        <div className={cx("form-section", "active")} id="basic-tab">
+                    {/* <!-- Form Content --> */}
+                    <div className={cx("form-content")}>
+                        {/* <!-- Basic Information Tab --> */}
+                        {activeTab === "basic" &&
+                            <div className={cx("form-section", "active")} id="basic-tab">
+                                <h2 className={cx("section-title")}>
+                                    <FontAwesomeIcon icon = {faInfoCircle} /> Basic Information
+                                </h2>
+                                
+                                <div className={cx("form-grid")}>
+                                    <div className={cx("form-group", "full-width")}>
+                                        <label htmlFor="projectName" className={cx("required")}>Plan Name</label>
+                                        <input type="text" id="projectName" 
+                                        placeholder="Enter your project name" 
+                                        required value={projectInfo.projectName} 
+                                        onChange={(e) => handleChangeprojectInfo('projectName', e.target.value)} />
+                                    </div>
+                                    
+                                    <div className={cx("form-group", "full-width")}>
+                                        <label htmlFor="projectType" className={cx("required")}>Plan Type</label>
+                                        <div className={cx("project-type-cards")}>
+                                            {
+                                                typeProject.map((type, index) => {
+                                                    return <div key={type.id} 
+                                                    className={cx("type-card", projectInfo.projectType === type.id ? "active": '')} 
+                                                    data-type={type.dataType}
+                                                    onClick={() => handleChangeprojectInfo('projectType', type.id)}>
+                                                                <div className = {cx("type-card__header")}>
+                                                                    <span className={cx("type-card__icon")} >{type.icon}</span>
+                                                                    {/* {type.icon} */}
+                                                                    <h3>{type.name}</h3>
+                                                                </div>
+                                                                <p>{type.description}</p>
+                                                            </div>
+                                                })
+                                            }
+                                        </div>
+                                    </div>
+                                    
+                                    <div className={cx("form-group", "start-date")}>
+                                        <label htmlFor="startDate" className={cx("required")}>Start Date</label>
+                                        <input type="date" id="startDate" required value={projectInfo.startDate} onChange={(e) => handleChangeprojectInfo('startDate', e.target.value)} />
+                                    </div>
+                                    
+                                    <div className={cx("form-group", "end-date")}>
+                                        <label htmlFor="endDate">End Date (Expected)</label>
+                                        <input type="date" id="endDate" value={projectInfo.endDate} onChange={(e) => handleChangeprojectInfo('endDate', e.target.value)} />
+                                    </div>
+                                    
+                                    <div className={cx("form-group", "full-width")}>
+                                        <label htmlFor="description">Plan Description</label>
+                                        <textarea id="description" 
+                                        placeholder="Describe plan goals and scope in detail..." 
+                                        value={projectInfo.description} 
+                                        onChange={(e) =>  handleChangeprojectInfo('description', e.target.value)}></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+                        {/* <!-- Project Details Tab --> */}
+                        {activeTab === "details" &&
+                        <div className={cx("form-section" , "active")} id="details-tab">
                             <h2 className={cx("section-title")}>
-                                <FontAwesomeIcon icon = {faInfoCircle} /> Basic Information
+                                <FontAwesomeIcon icon={faCogs} />
+                                Project Configuration
                             </h2>
                             
                             <div className={cx("form-grid")}>
-                                <div className={cx("form-group", "full-width")}>
-                                    <label htmlFor="projectName" className={cx("required")}>Project Name</label>
-                                    <input type="text" id="projectName" 
-                                    placeholder="Enter your project name" 
-                                    required value={projectInfo.projectName} 
-                                    onChange={(e) => handleChangeprojectInfo('projectName', e.target.value)} />
-                                </div>
-                                
                                 <div className={cx("form-group")}>
-                                    <label htmlFor="projectType" className={cx("required")}>Project Type</label>
-                                    <div className={cx("project-type-cards")}>
-                                        {
-                                            typeProject.map((type, index) => {
-                                                return <div key={type.id} 
-                                                className={cx("type-card", projectInfo.projectType === type.id ? "active": '')} 
-                                                data-type={type.dataType}
-                                                onClick={() => handleChangeprojectInfo('projectType', type.id)}>
-                                                            <div className = {cx("type-card__header")}>
-                                                                {type.icon}
-                                                                <h3>{type.name}</h3>
-                                                            </div>
-                                                            <p>{type.description}</p>
-                                                        </div>
-                                            })
-                                        }
-                                    </div>
-                                </div>
-                                
-                                <div className={cx("form-group")}>
-                                    <label htmlFor="startDate" className={cx("required")}>Start Date</label>
-                                    <input type="date" id="startDate" required value={projectInfo.startDate} onChange={(e) => handleChangeprojectInfo('startDate', e.target.value)} />
-                                </div>
-                                
-                                <div className={cx("form-group")}>
-                                    <label htmlFor="endDate">End Date (Expected)</label>
-                                    <input type="date" id="endDate" value={projectInfo.endDate} onChange={(e) => handleChangeprojectInfo('endDate', e.target.value)} />
-                                </div>
-                                
-                                <div className={cx("form-group", "full-width")}>
-                                    <label htmlFor="description">Project Description</label>
-                                    <textarea id="description" 
-                                    placeholder="Describe project goals and scope in detail..." 
-                                    value={projectInfo.description} 
-                                    onChange={(e) =>  handleChangeprojectInfo('description', e.target.value)}></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    }
-
-
-                    {/* <!-- Project Details Tab --> */}
-                    {activeTab === "details" &&
-                    <div className={cx("form-section" , "active")} id="details-tab">
-                        <h2 className={cx("section-title")}>
-                            <FontAwesomeIcon icon={faCogs} />
-                            Project Configuration
-                        </h2>
-                        
-                        <div className={cx("form-grid")}>
-                            <div className={cx("form-group")}>
-                                <label htmlFor="priority">Priority</label>
-                                <select id="priority"  value={projectInfo.priority} onChange={(e) => handleChangeprojectInfo('priority', e.target.value)}>
-                                    <option value="low">Low</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="high">High</option>
-                                    <option value="urgent">Urgent</option>
-                                </select>
-                            </div>
-                            
-                            <div className={cx("form-group")}>
-                                <label htmlFor="visibility">Visibility Mode</label>
-                                <select id="visibility" value={projectInfo.visibilityMode} onChange={(e) => handleChangeprojectInfo('visibilityMode', e.target.value)}>
-                                    <option value="private">Private (Only Me)</option>
-                                    <option value="team">Team (Members)</option>
-                                    <option value="public">Public (Everyone)</option>
-                                </select>
-                            </div>
-                            
-                            <div className={cx("form-group", "full-width")} id="workflow-section">
-                                <label>Workflow</label>
-                                <div className={cx("workflow-steps")}>
-                                    <div className={cx("workflow-step")}>
-                                        <div className={cx("step-number")}>1</div>
-                                        <div className={cx("step-content")}>
-                                            <h4>Backlog / To Do</h4>
-                                            <p>Tasks that are not yet planned</p>
-                                        </div>
-                                    </div>
-                                    <div className={cx("workflow-step")}>
-                                        <div className={cx("step-number")}>2</div>
-                                        <div className={cx("step-content")}>
-                                            <h4>In Progress</h4>
-                                            <p>Tasks currently being worked on</p>
-                                        </div>
-                                    </div>
-                                    <div className={cx("workflow-step")}>
-                                        <div className={cx("step-number")}>3</div>
-                                        <div className={cx("step-content")}>
-                                            <h4>Review</h4>
-                                            <p>Completed tasks waiting for review</p>
-                                        </div>
-                                    </div>
-                                    <div className={cx("workflow-step")}>
-                                        <div className={cx("step-number")}>4</div>
-                                        <div className={cx("step-content")}>
-                                            <h4>Completed</h4>
-                                            <p>Tasks that are fully finished</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    }
-                    {/* <!-- Members Tab --> */}
-                    {activeTab === "members" &&
-                    <div className={cx("form-section" , "active")} id="members-tab">
-                        <h2 className={cx("section-title")}>
-                            <FontAwesomeIcon icon={faUsers} />
-                            Add Members
-                        </h2>
-                        
-                        <div className={cx("form-group", "full-width")}>
-                            <label>Project Members</label>
-                            <div className={cx("members-container")}>
-                                
-                                <div className={cx("member-input-group")}>
-                                    <input type="email" className={cx("member-input")} id="memberEmail" placeholder="Enter member email" 
-                                    value={inputAddMember.email} 
-                                    onChange={(e) => setInputAddMember({
-                                        ...inputAddMember,
-                                        email: e.target.value
-                                    })} />
-                                    <select id="memberRole" value={inputAddMember.role} 
-                                    onChange={(e) => setInputAddMember({
-                                        ...inputAddMember,
-                                        role: e.target.value
-                                    })}>
-                                        <option value="member">Member</option>
-                                        <option value="admin">Administrator</option>
-                                        <option value="viewer">Viewer</option>
+                                    <label htmlFor="priority">Priority</label>
+                                    <select id="priority"  value={projectInfo.priority} onChange={(e) => handleChangeprojectInfo('priority', e.target.value)}>
+                                        <option value="low">Low</option>
+                                        <option value="medium">Medium</option>
+                                        <option value="high">High</option>
+                                        <option value="urgent">Urgent</option>
                                     </select>
-                                    <Button className={cx("add-member-btn")} id="addMemberBtn" onClick={handleAddMember}>
-                                        <FontAwesomeIcon icon={faUserPlus} /> Add
-                                    </Button>
                                 </div>
                                 
-                                <div className={cx("members-list")} id="membersList">
-                                    {
-                                        members.map((member, index) => {
-                                            return <div key={member.id} className={cx("member-tag")}>
-                                                        <span>{`${member.email} (${member.name} - ${member.role})`}</span>
-                                                        <FontAwesomeIcon className={cx('member-tag__xmark')} icon={faXmark} onClick={() => handleRemoveMember(member.id)} />
-                                                    </div>
-                                        } )
-                                    }
-                                    
+                                <div className={cx("form-group")}>
+                                    <label htmlFor="visibility">Visibility Mode</label>
+                                    <select id="visibility" value={projectInfo.visibilityMode} onChange={(e) => handleChangeprojectInfo('visibilityMode', e.target.value)}>
+                                        <option value="private">Private (Only Me)</option>
+                                        <option value="team">Team (Members)</option>
+                                        <option value="public">Public (Everyone)</option>
+                                    </select>
+                                </div>
+                                
+                                <div className={cx("form-group", "full-width")} id="workflow-section">
+                                    <label>Workflow</label>
+                                    <div className={cx("workflow-steps")}>
+                                        <div className={cx("workflow-step")}>
+                                            <div className={cx("step-number")}>1</div>
+                                            <div className={cx("step-content")}>
+                                                <h4>Backlog / To Do</h4>
+                                                <p>Tasks that are not yet planned</p>
+                                            </div>
+                                        </div>
+                                        <div className={cx("workflow-step")}>
+                                            <div className={cx("step-number")}>2</div>
+                                            <div className={cx("step-content")}>
+                                                <h4>In Progress</h4>
+                                                <p>Tasks currently being worked on</p>
+                                            </div>
+                                        </div>
+                                        <div className={cx("workflow-step")}>
+                                            <div className={cx("step-number")}>3</div>
+                                            <div className={cx("step-content")}>
+                                                <h4>Review</h4>
+                                                <p>Completed tasks waiting for review</p>
+                                            </div>
+                                        </div>
+                                        <div className={cx("workflow-step")}>
+                                            <div className={cx("step-number")}>4</div>
+                                            <div className={cx("step-content")}>
+                                                <h4>Completed</h4>
+                                                <p>Tasks that are fully finished</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    }
-                    
-
-                {/* Tasks Tab */}
-                {activeTab === "tasks" &&
-                    <div className={cx("form-section", "active")} id="tasks-tab">
-                        <h2 className={cx("section-title")}>
-                            <FontAwesomeIcon icon={faTasks} /> Create Initial Tasks
-                        </h2>
-                        
-                        <div className={cx("tasks-summary")}>
-                            <div className={cx("summary-item")}>
-                                <span className={cx("summary-count")}>{tasks.length}</span>
-                                <span className={cx("summary-label")}>Total Tasks</span>
-                            </div>
-                            <div className={cx("summary-item")}>
-                                <span className={cx("summary-count")}>
-                                    {tasks.filter(t => t.assignees.length > 0).length}
-                                </span>
-                                <span className={cx("summary-label")}>Assigned Tasks</span>
-                            </div>
-                            <div className={cx("summary-item")}>
-                                <span className={cx("summary-count")}>
-                                    {tasks.reduce((total, task) => total + task.estimatedHours, 0)}
-                                </span>
-                                <span className={cx("summary-label")}>Total Hours</span>
+                        }
+                        {/* <!-- Members Tab --> */}
+                        {activeTab === "members" &&
+                        <div className={cx("form-section" , "active")} id="members-tab">
+                            <h2 className={cx("section-title")}>
+                                <FontAwesomeIcon icon={faUsers} />
+                                Add Members
+                            </h2>
+                            
+                            <div className={cx("form-group", "full-width")}>
+                                <label>Project Members</label>
+                                <div className={cx("members-container")}>
+                                    
+                                    <div className={cx("member-input-group")}>
+                                        <input type="email" className={cx("member-input")} id="memberEmail" placeholder="Enter member email" 
+                                        value={inputAddMember.email} 
+                                        onChange={(e) => setInputAddMember({
+                                            ...inputAddMember,
+                                            email: e.target.value
+                                        })} />
+                                        <select id="memberRole" value={inputAddMember.role} 
+                                        onChange={(e) => setInputAddMember({
+                                            ...inputAddMember,
+                                            role: e.target.value
+                                        })}>
+                                            <option value="member">Member</option>
+                                            <option value="admin">Administrator</option>
+                                            <option value="viewer">Viewer</option>
+                                        </select>
+                                        <Button className={cx("add-member-btn")} id="addMemberBtn" onClick={handleAddMember}>
+                                            <FontAwesomeIcon icon={faUserPlus} /> Add
+                                        </Button>
+                                    </div>
+                                    
+                                    <div className={cx("members-list")} id="membersList">
+                                        {
+                                            members.map((member, index) => {
+                                                return <div key={member.id} className={cx("member-tag")}>
+                                                            <span>{`${member.email} (${member.name} - ${member.role})`}</span>
+                                                            <FontAwesomeIcon className={cx('member-tag__xmark')} icon={faXmark} onClick={() => handleRemoveMember(member.id)} />
+                                                        </div>
+                                            } )
+                                        }
+                                        
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        }
                         
-                        <div className={cx("form-group", "full-width")}>
-                            <label>Task List</label>
-                            <div className={cx("tasks-container")}>
-                                {tasks.map((task) => (
-                                    <div className={cx("task-item")} key={task.id}>
-                                        <div className={cx("task-main")}>
-                                            <div className={cx("task-info")}>
-                                                <FontAwesomeIcon className={cx("task-drag")} icon={faGripVertical} />
-                                                <div className={cx("task-name-container")}>
-                                                    <input 
-                                                        type="text"
-                                                        value={task.name}
-                                                        onChange={(e) => handleChangeTaskField(task.id, 'name', e.target.value)}
-                                                        placeholder="Task name"
-                                                        className={cx("task-name-input")}
-                                                    />
+
+                    {/* Tasks Tab */}
+                    {activeTab === "tasks" &&
+                        <div className={cx("form-section", "active")} id="tasks-tab">
+                            <h2 className={cx("section-title")}>
+                                <FontAwesomeIcon icon={faTasks} /> Create Initial Tasks
+                            </h2>
+                            
+                            <div className={cx("tasks-summary")}>
+                                <div className={cx("summary-item")}>
+                                    <span className={cx("summary-count")}>{tasks.length}</span>
+                                    <span className={cx("summary-label")}>Total Tasks</span>
+                                </div>
+                                <div className={cx("summary-item")}>
+                                    <span className={cx("summary-count")}>
+                                        {tasks.filter(t => t.assignees.length > 0).length}
+                                    </span>
+                                    <span className={cx("summary-label")}>Assigned Tasks</span>
+                                </div>
+                                <div className={cx("summary-item")}>
+                                    <span className={cx("summary-count")}>
+                                        {tasks.reduce((total, task) => total + task.estimatedHours, 0)}
+                                    </span>
+                                    <span className={cx("summary-label")}>Total Hours</span>
+                                </div>
+                            </div>
+                            
+                            <div className={cx("form-group", "full-width")}>
+                                <label>Task List</label>
+                                <div className={cx("tasks-container")}>
+                                    {tasks.map((task) => (
+                                        <div className={cx("task-item")} key={task.id}>
+                                            <div className={cx("task-main")}>
+                                                <div className={cx("task-info")}>
+                                                    <FontAwesomeIcon className={cx("task-drag")} icon={faGripVertical} />
+                                                    <div className={cx("task-name-container")}>
+                                                        <input 
+                                                            type="text"
+                                                            value={task.name}
+                                                            onChange={(e) => handleChangeTaskField(task.id, 'name', e.target.value)}
+                                                            placeholder="Task name"
+                                                            className={cx("task-name-input")}
+                                                        />
+                                                    </div>
                                                 </div>
+                                                
+                                                <div className={cx("task-meta")}>
+                                                    <span className={`${cx("priority-badge")} ${cx(task.priority)}`}>
+                                                        {task.priority}
+                                                    </span>
+                                                    {task.deadline && (
+                                                        <span className={cx("deadline-badge")}>
+                                                            <FontAwesomeIcon icon={faCalendarAlt} /> 
+                                                            {new Date(task.deadline).toLocaleDateString()}
+                                                        </span>
+                                                    )}
+                                                    {task.estimatedHours > 0 && (
+                                                        <span className={cx("hours-badge")}>
+                                                            <FontAwesomeIcon icon={faClock} /> 
+                                                            {task.estimatedHours}h
+                                                        </span>
+                                                    )}
+                                                    {task.assignees.length > 0 && (
+                                                            <div className={cx("task-assignee-badges")}>
+                                                                {task.assignees.slice(0, 2).map(assigneeId => {
+                                                                    const member = members.find(m => m.id === assigneeId);
+                                                                    return member ? (
+                                                                        <span key={assigneeId} className={cx("assignee-badge")}>
+                                                                            {member.name.charAt(0)}
+                                                                        </span>
+                                                                    ) : null;
+                                                                })}
+                                                                {task.assignees.length > 2 && (
+                                                                    <span className={cx("assignee-badge", "more")}>
+                                                                        +{task.assignees.length - 2}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                </div>
+
                                             </div>
                                             
-                                            <div className={cx("task-meta")}>
-                                                <span className={`${cx("priority-badge")} ${cx(task.priority)}`}>
-                                                    {task.priority}
-                                                </span>
-                                                {task.deadline && (
-                                                    <span className={cx("deadline-badge")}>
-                                                        <FontAwesomeIcon icon={faCalendarAlt} /> 
-                                                        {new Date(task.deadline).toLocaleDateString()}
-                                                    </span>
-                                                )}
-                                                {task.estimatedHours > 0 && (
-                                                    <span className={cx("hours-badge")}>
-                                                        <FontAwesomeIcon icon={faClock} /> 
-                                                        {task.estimatedHours}h
-                                                    </span>
-                                                )}
-                                                {task.assignees.length > 0 && (
-                                                        <div className={cx("task-assignee-badges")}>
-                                                            {task.assignees.slice(0, 2).map(assigneeId => {
-                                                                const member = members.find(m => m.id === assigneeId);
-                                                                return member ? (
-                                                                    <span key={assigneeId} className={cx("assignee-badge")}>
-                                                                        {member.name.charAt(0)}
-                                                                    </span>
-                                                                ) : null;
-                                                            })}
-                                                            {task.assignees.length > 2 && (
-                                                                <span className={cx("assignee-badge", "more")}>
-                                                                    +{task.assignees.length - 2}
-                                                                </span>
-                                                            )}
-                                                        </div>
-                                                    )}
+                                            <div className={cx("task-actions")}>
+                                                <select 
+                                                    value={task.status}
+                                                    onChange={(e) => handleChangeTaskField(task.id, 'status', e.target.value)}
+                                                    className={cx("status-select")}
+                                                >
+                                                    <option value="todo">To Do</option>
+                                                    <option value="doing">Doing</option>
+                                                    <option value="review">Review</option>
+                                                    <option value="done">Done</option>
+                                                </select>
+                                                <button 
+                                                    className={cx("task-action-btn", "detail-btn")}
+                                                    onClick={() => setShowTaskDetail(task.id)}
+                                                    title="View/Edit Details"
+                                                >
+                                                    <FontAwesomeIcon icon={faEdit} />
+                                                </button>
+                                                <button 
+                                                    className={cx("task-action-btn", "delete-btn")}
+                                                    onClick={() => handleDeleteTask(task.id)}
+                                                    title="Delete"
+                                                >
+                                                    <FontAwesomeIcon icon={faTrash} />
+                                                </button>
                                             </div>
-
                                         </div>
-                                        
-                                        <div className={cx("task-actions")}>
-                                            <select 
-                                                value={task.status}
-                                                onChange={(e) => handleChangeTaskField(task.id, 'status', e.target.value)}
-                                                className={cx("status-select")}
-                                            >
-                                                <option value="todo">To Do</option>
-                                                <option value="doing">Doing</option>
-                                                <option value="review">Review</option>
-                                                <option value="done">Done</option>
-                                            </select>
-                                            <button 
-                                                className={cx("task-action-btn", "detail-btn")}
-                                                onClick={() => setShowTaskDetail(task.id)}
-                                                title="View/Edit Details"
-                                            >
-                                                <FontAwesomeIcon icon={faEdit} />
-                                            </button>
-                                            <button 
-                                                className={cx("task-action-btn", "delete-btn")}
-                                                onClick={() => handleDeleteTask(task.id)}
-                                                title="Delete"
-                                            >
-                                                <FontAwesomeIcon icon={faTrash} />
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
+                                
+                                <button className={cx("add-task-btn")} onClick={handleAddTask}>
+                                    <FontAwesomeIcon icon={faPlus} /> Add New Task
+                                </button>
                             </div>
                             
-                            <button className={cx("add-task-btn")} onClick={handleAddTask}>
-                                <FontAwesomeIcon icon={faPlus} /> Add New Task
-                            </button>
+                            {/* Render task detail modal */}
+                            {showTaskDetail && (() => {
+                                const task = tasks.find(t => t.id === showTaskDetail);
+                                return task ? renderTaskDetail(task) : null;
+                            })()}
                         </div>
-                        
-                        {/* Render task detail modal */}
-                        {showTaskDetail && (() => {
-                            const task = tasks.find(t => t.id === showTaskDetail);
-                            return task ? renderTaskDetail(task) : null;
-                        })()}
-                    </div>
-                
-            }
-            </div>
-        </div>
-        {/* <!-- Form Actions --> */}
-            <div className={cx("form-actions")}>
-                <Button className={cx("btn", "btn-cancel")} id="cancelBtn" leftIcon = {<FontAwesomeIcon icon = {faTimes} />}>
-                     Cancel
-                </Button>
-                <Button className={cx("btn", "btn-create")} id="createBtn" leftIcon = {<FontAwesomeIcon icon = {faPlusCircle} />}>
-                     Create Project
-                </Button>
+                    
+                }
+                </div>
+                </div>
+            {/* <!-- Form Actions --> */}
+                <div className={cx("form-actions")}>
+                    <Button className={cx("btn", "btn-cancel")} id="cancelBtn" leftIcon = {<FontAwesomeIcon icon = {faTimes} />}>
+                        Cancel
+                    </Button>
+                    <Button className={cx("btn", "btn-create")} id="createBtn" leftIcon = {<FontAwesomeIcon icon = {faPlusCircle} />}>
+                        Create Project
+                    </Button>
+                </div>
             </div>
         </div>
     );

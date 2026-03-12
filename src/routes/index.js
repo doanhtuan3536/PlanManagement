@@ -8,11 +8,12 @@ const publicRoutes = [
     {
         path: KeyRouteFullPath('home'),
         Component: lazy(() => import('~/pages/Home')),
-        layout: DefaultWithLeftNavBar
+        // headerName: "Home"
     },
     {
         path: '/',
-        Component: lazy(() => import('~/pages/Loading')),
+        Component: lazy(() => import('~/pages/Home')),
+        // headerName: "Home"
     },
     // {
     //     path: KeyRouteFullPath('projects'),
@@ -51,18 +52,32 @@ const privateRoutes = [
         //         Component: lazy(() => import('~/pages/Trash')),
         //     },
         // ],
+        headerName: "Projects"
     },
     {
         path: KeyRouteFullPath('create'),
         Component: lazy(() => import('~/pages/CreateForm')),
+        headerName: "Create new plan"
     },
     {
         path: KeyRouteFullPath('trash'),
         Component: lazy(() => import('~/pages/Trash')),
+        headerName: "Trash"
     },
     {
         path: KeyRouteFullPath('project'),
         Component: lazy(() => import('~/pages/Project')),
+        headerName: "Your plan"
+    },
+    {
+        path: KeyRouteFullPath('profile'),
+        Component: lazy(() => import('~/pages/Profile')),
+        headerName: "Account profile"
+    },
+    {
+        path: KeyRouteFullPath('settings'),
+        Component: lazy(() => import('~/pages/Settings')),
+        headerName: "Account Settings"
     },
 
 ];

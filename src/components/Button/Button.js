@@ -22,6 +22,9 @@ function Button({
     disabled = false,
     actionBtn = false,
     sprintBtn = false,
+    normalHover = false,
+    small = false,
+    primaryHover = false,
     ...ParaProps
 }) {
     let Comp = 'button';
@@ -57,7 +60,11 @@ function Button({
         outline,
         actionBtn,
         sprintBtn,
-        noHover
+        noHover,
+        normalHover,
+        disabled,
+        small,
+        primaryHover
     });
     return (
         <Comp className={classes} {...props}>

@@ -22,5 +22,11 @@ const routes = {
     signup: {
         path: '/signup',
     },
+    profile:{
+        path: '/profile'
+    },
+    settings:{
+        path: '/settings'
+    },
 };
 export default routes;

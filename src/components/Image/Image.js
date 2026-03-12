@@ -12,7 +12,7 @@ function Image({ src, alt, className, fallback: customFallback = images.noImage5
     function HandleError() {
         setFallback(customFallback);
     }
-    return <img className={cx(className)} src={fallback || src} alt={alt} {...props} onError={HandleError} />;
+    return <img className={cx(className)} src={fallback || src || "no-image"} alt={alt} {...props} onError={HandleError} />;
 }
 
 export default Image;

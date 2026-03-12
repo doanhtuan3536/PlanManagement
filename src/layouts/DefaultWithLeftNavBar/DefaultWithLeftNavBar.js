@@ -10,11 +10,12 @@ import { faInfoCircle, faCogs, faUsers, faTasks
 import styles from './DefaultWithLeftNavBar.module.scss';
 
 const cx = classNames.bind(styles);
-function DefaultWithLeftNavBar({ children }) {
+function DefaultWithLeftNavBar({ children, headerName }) {
     return (
         <div className={cx('wrapper')}>
             <Header />
             <div className={cx('container')}>
+                {headerName && <div className={cx("container-header")}>{headerName}</div>}
                 <LeftNavbar headerName={'Task manager'} iconHeader={<FontAwesomeIcon icon={faTasks} />} />
                 <div className={cx('content')}>{children}</div>
             </div>

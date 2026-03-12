@@ -14,7 +14,7 @@
 }
 
 .grid.wide {
-    max-width: 1496px;
+    max-width: var(--wide-content);
     margin: 0 auto;
 }
 

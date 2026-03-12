@@ -1,5 +1,6 @@
 // src/context/AuthContext.js
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import authService from '~/services/AuthService';
 
 const AuthContext = createContext();
@@ -16,10 +17,31 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
+
+  const initializeAuth = async () => {
+  try {
+    const result = await authService.getCurrentUser();
+
+    if (result.success) {
+      setUser(result.user);
+      setIsAuthenticated(true);
+      navigate(-1);
+    } else {
+      setUser(null);
+      setIsAuthenticated(false);
+    }
+  } catch (error) {
+    setUser(null);
+    setIsAuthenticated(false);
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Check authentication status on app load
   useEffect(() => {
-    checkAuthStatus();
+    initializeAuth();
     
     // Listen for auth changes (login/logout)
     const handleAuthChange = () => {

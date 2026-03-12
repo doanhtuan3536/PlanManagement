@@ -44,8 +44,8 @@ function App() {
     return (
         <Suspense fallback={<Loading />}>
             <NotificationProvider>
-                <AuthProvider>
                     <BrowserRouter>
+                    <AuthProvider>
                         <div className="App">
                             <Routes>
                                 {publicRoutes.map((route, index) => {
@@ -62,7 +62,7 @@ function App() {
                                                 key={index}
                                                 path={route.path}
                                                 element={
-                                                    <Layout>
+                                                    <Layout headerName = {route.headerName}>
                                                         <Suspense fallback={<Loading />}>
                                                             <Page />
                                                         </Suspense>
@@ -78,7 +78,7 @@ function App() {
                                             key={index}
                                             path={route.path}
                                             element={
-                                                <Layout>
+                                                <Layout headerName = {route.headerName}>
                                                     <Suspense fallback={<Loading />}>
                                                         <Page />
                                                     </Suspense>
@@ -102,7 +102,7 @@ function App() {
                                                 path={route.path}
                                                 element={
                                                     <PrivateRoute>
-                                                        <Layout>
+                                                        <Layout headerName = {route.headerName}>
                                                             
                                                             <Suspense fallback={<Loading />}>
                                                                 <Page />
@@ -122,7 +122,7 @@ function App() {
                                             path={route.path}
                                             element={
                                                 <PrivateRoute>
-                                                    <Layout>
+                                                    <Layout headerName = {route.headerName}>
                                                         
                                                             <Suspense fallback={<Loading />}>
                                                                 <Page />
@@ -150,8 +150,9 @@ function App() {
                                 
                             </Routes>
                         </div> */}
+                        </AuthProvider>
                     </BrowserRouter>
-                </AuthProvider>
+                
             </NotificationProvider>
         </Suspense>
         // <div>haha</div>

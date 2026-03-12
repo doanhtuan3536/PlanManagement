@@ -166,6 +166,55 @@ class AuthService {
       // window.location.href = '/login';
     }
   }
+  async getCurrentUser() {
+    try {
+      const response = await axiosInstance.post('/api/auth/validate', {
+        withCredentials: true
+      });
+
+      if (response.status === 200) {
+        const data = response.data;
+        
+        // Store tokens in memory
+        this.tokens = {
+          opaqueToken: data.opaqueToken,
+          refreshToken: data.refreshToken,
+          refreshTokenId: data.refreshTokenId,
+          expiresIn: data.expiresIn
+        };
+
+        console.log(this.tokens)
+
+        // Store user info in memory or context
+        this.user = {
+          username: data.username,
+          userId: data.userId,
+          avatar: data.avatar
+          // You can extract more info from response if needed
+        };
+
+        // // Calculate token expiry time
+        this.tokenExpiryTime = Date.now() + (data.expiresIn * 1000);
+
+        // // Schedule token refresh
+        // this.scheduleTokenRefresh();
+
+        console.log('Login successful, tokens stored in memory');
+        return {
+          success: true,
+          user: this.user,
+          data: data
+        };
+      }
+
+    } catch (error) {
+      console.error('validate failed:', error.response?.data || error.message);
+      return {
+        success: false,
+        error: error.response?.data?.message || 'validate failed'
+      };
+    }
+  }
 
   clearTokens() {
     this.tokens = {

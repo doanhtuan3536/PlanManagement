@@ -1,0 +1,26 @@
+.wrapper{
+    background: white;
+    border-radius: 48px;
+    padding: 2rem 2.2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 25px -15px #a0bde0;
+    border: 1px solid #e1efff;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s;
+    .header{
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+    &.hover:hover{
+        border-color: #92b5f0;
+        box-shadow: 0 24px 34px -18px var(--primary-color);
+        transform: translateY(-3px);
+    }
+    .content{
+        flex-grow: 1;
+    }
+}
