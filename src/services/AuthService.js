@@ -14,6 +14,60 @@ class AuthService {
     this.tokenExpiryTime = null;
     this.refreshTimer = null;
   }
+  async getUserInfo(){
+    try {
+      console.log("getUserInfo")
+      const response = await axiosInstance.get(`/api/auth/${this.user.userId}`);
+
+      if (response.status === 200) {
+        const data = response.data;
+        console.log(response.data)
+        return {
+          success: true,
+          user: data,
+        };
+      }
+    } 
+    catch (error) {
+      console.error('getUserInfo failed:', error.response?.data || error.message);
+      return {
+        success: false,
+        error: error.response?.data?.message || 'getUserInfo failed'
+      };
+    }
+  }
+
+  async uploadAvatar(file){
+    try {
+      console.log("upload avatar")
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("userId", this.user.userId);
+      const response = await axiosInstance.post(`/api/auth/upload/avatar`, formData, 
+        // {
+        //   headers: {
+        //     "Content-Type": "multipart/form-data"
+        //   }
+        // }
+      );
+
+      if (response.status === 200) {
+        const data = response.data;
+        console.log(response.data)
+        return {
+          success: true,
+          url: data.url,
+        };
+      }
+    } 
+    catch (error) {
+      console.error('uploadAvatar failed:', error.response?.data || error.message);
+      return {
+        success: false,
+        error: error.response?.data?.message || 'uploadAvatar failed'
+      };
+    }
+  }
 
   async login(username, password) {
     try {
@@ -85,31 +139,47 @@ class AuthService {
     if (this.refreshPromise) {
       return this.refreshPromise;
     }
-
+    console.log(this.user)
+    
+    if(!this.user?.username){
+        throw new Error("Can not do refresh");
+      }
+    const username = this.user.username;
     this.refreshPromise = new Promise(async (resolve, reject) => {
+      
       try {
+        
         const response = await axiosInstance.post('/api/auth/refresh', {
-          refreshToken: this.tokens.refreshToken
+          username
         });
 
         if (response.status === 200) {
-          const data = response.data;
-          
-          // Update tokens in memory
-          this.tokens = {
-            opaqueToken: data.opaqueToken,
-            refreshToken: data.refreshToken || this.tokens.refreshToken,
-            expiresIn: data.expiresIn
-          };
+        const data = response.data;
+        this.tokenExpiryTime = Date.now() + (data.expiresIn * 1000);
 
-          this.tokenExpiryTime = Date.now() + (data.expiresIn * 1000);
+          // Store tokens in memory
+        this.tokens = {
+          opaqueToken: data.opaqueToken,
+          refreshToken: data.refreshToken || this.tokens.refreshToken,
+          refreshTokenId: data.refreshTokenId,
+          expiresIn: data.expiresIn
+        };
+
+        console.log(this.tokens)
+
+        this.user = {
+          username: data.username,
+          userId: data.userId,
+          avatar: data.avatar
+        };
           
           // Reschedule refresh
-          this.scheduleTokenRefresh();
+          // this.scheduleTokenRefresh();
 
           console.log('Token refreshed successfully');
           resolve(true);
         } else {
+          this.clearTokens();
           reject(new Error('Refresh failed'));
         }
       } catch (error) {

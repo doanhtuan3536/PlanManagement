@@ -214,7 +214,10 @@ function Header() {
                                                 alt="User avatar" 
                                                 className={cx('user-avatar')}
                                             /> */}
-                                            <Image src={user.avatar} alt="User avatar" className={cx('user-avatar')} />
+                                            <div className={cx('user-avatar')}>
+                                                <Image src={user.avatar} alt="User avatar"  />
+                                            </div>
+                                            
                                             {/* <svg className={cx('dropdown-arrow')} width="16" height="16" viewBox="0 0 24 24" fill="none">
                                                 <path d="M7 10L12 15L17 10H7Z" fill="currentColor"/>
                                             </svg> */}

@@ -44,10 +44,15 @@ import Modal from '~/components/Modal';
 import { faFacebookF, faGithub, faGoogle, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import Button from '~/components/Button';
 import Section from '../components/Section';
+import { useAuth } from '~/context/AuthContext';
+import { useNotificatonContext } from '~/context/NotificationContext';
+import Image from '~/components/Image';
+import AvatarEditor from 'react-avatar-editor';
 const cx = classNames.bind(styles);
 
 function Settings() {
     // State for user data
+    
     const [userData, setUserData] = useState({
         fullName: 'Anh Tuan Do',
         username: 'doanhthuan1',
@@ -69,9 +74,74 @@ function Settings() {
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [toast, setToast] = useState({ show: false, message: '', isSuccess: true });
+    // const [avatarUrl, setAvatarUrl] = useState(null);
+    
+
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [zoom, setZoom] = useState(1);
+    const {uploadAvatar, setUser, user} = useAuth();
+    const {showNotification} = useNotificatonContext();
+    const [loading, setLoading] = useState(false);
+    const [avatarModal, setAvatarModal] = useState(false);
+    const [fileImage, setFileImage] = useState(null);
 
     // Refs
     const avatarInputRef = useRef(null);
+    const editorRef = useRef(null);
+
+    //image upload
+    const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      const imageUrl = URL.createObjectURL(file);
+      setSelectedImage(imageUrl);
+      setZoom(1);
+    }
+  };
+
+  const handleZoomChange = (e) => {
+    setZoom(parseFloat(e.target.value));
+  };
+
+  const handleSaveAvatar = async () => {
+    if (!editorRef.current || !selectedFile) return;
+
+    try {
+      const canvas = editorRef.current.getImageScaledToCanvas();
+      
+      const croppedImageBlob = await new Promise((resolve) => {
+        canvas.toBlob((blob) => {
+          resolve(blob);
+        }, 'image/jpeg', 0.95);
+      });
+
+      const croppedFile = new File(
+        [croppedImageBlob], 
+        selectedFile.name.replace(/\.[^/.]+$/, '') + '_cropped.jpg', 
+        { type: 'image/jpeg' }
+      );
+      const wait = await handleAvatarUpload(croppedFile);
+      
+      setAvatarModal(false);
+      setSelectedImage(null);
+      setSelectedFile(null);
+      setZoom(1);
+      
+    } catch (error) {
+      console.error('Error processing image:', error);
+      showNotification("Something went wrong. Try reloading the page");
+    }
+  };
+
+  const handleCancel = () => {
+    setAvatarModal(false);
+    setSelectedImage(null);
+    setSelectedFile(null);
+    setZoom(1);
+    URL.revokeObjectURL(selectedImage);
+  };
 
     // Show toast
     const showToast = (message, isSuccess = true) => {
@@ -103,15 +173,25 @@ function Settings() {
     };
 
     // Handle avatar upload
-    const handleAvatarUpload = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                setUserData(prev => ({ ...prev, avatar: event.target.result }));
-                showToast('✓ Avatar updated successfully');
-            };
-            reader.readAsDataURL(file);
+    const handleAvatarUpload = async (file) => {
+        if (!file) return;
+    
+        try {
+            setLoading(true);
+            const result = await uploadAvatar(file);
+            if (result.success) {
+                setUserData({
+                    ...userData, avatar: result.url
+                });
+                setUser({...user, avatar: result.url});
+                showNotification("Upload new avatar successfully", "success");
+            } else {
+                showNotification("Something went wrong. Try reloading the page");
+            }
+        } catch (error) {
+            showNotification("Something went wrong. Try reloading the page");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -156,11 +236,11 @@ function Settings() {
     };
 
     // Handle cancel
-    const handleCancel = () => {
-        if (window.confirm('Discard unsaved changes?')) {
-            showToast('Changes discarded');
-        }
-    };
+    // const handleCancel = () => {
+    //     if (window.confirm('Discard unsaved changes?')) {
+    //         showToast('Changes discarded');
+    //     }
+    // };
 
     // Escape key handler
     useEffect(() => {
@@ -329,18 +409,14 @@ function Settings() {
                             </div>
                             <div className={cx('avatar-upload')}>
                                 <div className={cx('avatar-preview')}>
-                                    {userData.avatar ? (
-                                        <img src={userData.avatar} alt="avatar" />
-                                    ) : (
-                                        <span>{avatarInitial}</span>
-                                    )}
+                                    <Image src={selectedImage || user.avatar} alt="avatar" />
                                 </div>
                                 <div className={cx('avatar-actions')}>
                                     <Button
                                         small
                                         primary
                                         leftIcon={<FontAwesomeIcon icon={faCloudUpload} />}
-                                        onClick={() => avatarInputRef.current?.click()}
+                                        onClick={() => setAvatarModal(true)}
                                         rounded
                                     >
                                         Upload image
@@ -356,13 +432,6 @@ function Settings() {
                                          Remove
                                     </Button>
                                 </div>
-                                <input
-                                    type="file"
-                                    ref={avatarInputRef}
-                                    accept="image/*"
-                                    onChange={handleAvatarUpload}
-                                    style={{ display: 'none' }}
-                                />
                             </div>
                         </div>
                     </div>
@@ -619,13 +688,134 @@ function Settings() {
                 />
             </Modal>
 
-            {/* Toast */}
-            {/* {toast.show && (
-                <div className={cx('toast', 'show')} style={{ background: toast.isSuccess ? '#1e3a5f' : '#a12b2b' }}>
-                    <FontAwesomeIcon icon={faCircleCheck} />
-                    <span>{toast.message}</span>
+            {/* <Modal
+                conditionOpen={avatarModal}
+                onClickModalOverlay={() => setAvatarModal(false)}
+                header={<h3>
+                    Preview avatar
+                </h3>}
+                footer={
+                    <>
+                        <Button 
+                            rounded  onClick={() => setAvatarModal(false)}>Cancel
+                        </Button>
+                        <Button 
+                            rounded primary onClick={handleAvatarUpload}>Confirm
+                        </Button>
+                    </>
+                }
+            >
+                <div className={cx('avatar-upload')}>
+                    <div className={cx('avatar-preview')}>
+                        <Image src = {userData.avatar} alt="avatar"/>
+                    </div>
                 </div>
-            )} */}
+                <input
+                    type="file"
+                    ref={avatarInputRef}
+                    accept="image/*"
+                    onChange={(e) => {
+                        const file = e.target.files[0];
+                        setUserData({
+                            ...userData,
+                            avatar: URL.createObjectURL(file)
+                        })
+                    }}
+                    // style={{ display: 'none' }}
+                />
+            </Modal> */}
+            <Modal
+                conditionOpen={avatarModal}
+                onClickModalOverlay={handleCancel}
+                header={<h3>Preview avatar</h3>}
+                footer={
+                    <>
+                    <Button 
+                        rounded 
+                        onClick={handleCancel}
+                        disabled={loading}
+                    >
+                        Cancel
+                    </Button>
+                    <Button 
+                        rounded 
+                        primary 
+                        onClick={handleSaveAvatar}
+                        disabled={loading || !selectedImage}
+                    >
+                        {loading ? 'Uploading...' : 'Confirm'}
+                    </Button>
+                    </>
+                }
+                >
+                <div className={cx('avatar-upload')}>
+                    {!selectedImage ? (
+                    <div className={cx('upload-section')}>
+                        <div className={cx('avatar-preview')}>
+                        <Image src={user.avatar} alt="avatar"  />
+                        </div>
+                        <div className={cx('upload-prompt')}>
+                        <p>Profile pictures help people recognize you across posts, comments, messages...</p>
+                        <Button 
+                            rounded 
+                            primary 
+                            onClick={() => avatarInputRef.current.click()}
+                            disabled={loading}
+                        >
+                            + Upload new image
+                        </Button>
+                        </div>
+                    </div>
+                    ) : (
+                    <div className={cx('editor-section')}>
+                        <div className={cx('editor-container')}>
+                        <AvatarEditor
+                            ref={editorRef}
+                            image={selectedImage}
+                            width={230}
+                            height={230}
+                            border={50}
+                            color={[255, 255, 255, 0.6]}
+                            scale={zoom}
+                            rotate={0}
+                            borderRadius={60}
+                        />
+                        </div>
+                        
+                        <div className={cx('zoom-control')}>
+                        <label>Zoom: {Math.round(zoom * 100)}%</label>
+                        <input
+                            type="range"
+                            min="1"
+                            max="3"
+                            step="0.01"
+                            value={zoom}
+                            onChange={handleZoomChange}
+                            disabled={loading}
+                        />
+                        </div>
+                        
+                        <div className={cx('upload-new-button')}>
+                        <Button 
+                            rounded 
+                            onClick={() => avatarInputRef.current.click()}
+                            disabled={loading}
+                        >
+                            Choose another image
+                        </Button>
+                        </div>
+                    </div>
+                    )}
+                    
+                    <input
+                    type="file"
+                    ref={avatarInputRef}
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    style={{ display: 'none' }}
+                    />
+                </div>
+            </Modal>
             </div>
         </div>
     );

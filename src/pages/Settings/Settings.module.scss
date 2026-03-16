@@ -257,17 +257,17 @@
 }
 
 .avatar-preview {
-    width: 100px;
-    height: 100px;
+    width: 230px;
+    height: 230px;
     background: linear-gradient(145deg, #2f62b0, #173e7c);
-    border-radius: 34px;
+    border-radius: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     font-size: 3rem;
     font-weight: 600;
-    border: 4px solid white;
+    // border: 4px solid white;
     box-shadow: 0 8px 20px -8px #1e3f8a;
     position: relative;
     overflow: hidden;
@@ -283,6 +283,130 @@
         display: block;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     }
+}
+
+/* New styles for upload section */
+.upload-section {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.upload-prompt {
+    flex: 1;
+    min-width: 250px;
+}
+
+.upload-prompt p {
+    color: #666;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+/* Editor section styles */
+.editor-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.editor-container {
+    display: flex;
+    justify-content: center;
+    // padding: 1.5rem;
+    background: linear-gradient(145deg, #2f62b0, #173e7c);
+    border-radius: 34px;
+    border: 4px solid white;
+    box-shadow: 0 8px 20px -8px #1e3f8a;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+/* Zoom control styles */
+.zoom-control {
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+}
+
+.zoom-control label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #173e7c;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.zoom-control input[type="range"] {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: #ddd;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.zoom-control input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #2f62b0, #173e7c);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.zoom-control input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    background: linear-gradient(145deg, #3a73c9, #1e4a9c);
+}
+
+.zoom-control input[type="range"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.zoom-control input[type="range"]:disabled::-webkit-slider-thumb {
+    background: #999;
+    cursor: not-allowed;
+}
+
+.upload-new-button {
+    margin-top: 0.5rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .avatar-upload {
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .upload-section {
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .upload-prompt {
+        text-align: center;
+    }
+    
+    .avatar-preview {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+/* Optional: Style for the AvatarEditor component to match your theme */
+.editor-container canvas {
+    border-radius: 30px !important; /* Match your border radius */
 }
 
 .avatar-actions {

@@ -54,6 +54,9 @@ import Image from '~/components/Image';
 import { useAuth } from '~/context/AuthContext';
 import Pagination from '../components/Pagination';
 import Button from '~/components/Button';
+import Loading from '../Loading';
+import authService from '~/services/AuthService';
+import { useNotificatonContext } from '~/context/NotificationContext';
 
 const cx = classNames.bind(styles);
 
@@ -100,7 +103,10 @@ function Profile() {
     const [projectFilter, setProjectFilter] = useState('');
     const [moneyFilter, setMoneyFilter] = useState('');
     const [globalFilter, setGlobalFilter] = useState('');
-    const {user} = useAuth()
+    const {getUserInfo} = useAuth()
+    const {showNotification} = useNotificatonContext();
+    const [loading, setLoading] = useState(true);
+    const [userInfo, setUserInfo] = useState(null);
     // Page states
     const [todoPage, setTodoPage] = useState(1);
     const [projectPage, setProjectPage] = useState(1);
@@ -211,6 +217,25 @@ function Profile() {
 
     // Reset page when filter changes
     useEffect(() => {
+        const fetchUserInfo = async () =>{
+            try {
+                setLoading(true);
+                const result = await getUserInfo();  // Changed from email to username
+                if (result.success) {
+                    setUserInfo(result.user)
+                } else {
+                    showNotification("Something went wrong. Try reloading the page")
+                    // setError(result.error + ". Try again" || 'Đăng nhập thất bại');
+                }
+            } catch (error) {
+                showNotification("Something went wrong. Try reloading the page");
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchUserInfo();
+    },[])
+    useEffect(() => {
         setTodoPage(1);
     }, [todoFilter, globalFilter]);
 
@@ -221,6 +246,9 @@ function Profile() {
     useEffect(() => {
         setMoneyPage(1);
     }, [moneyFilter, globalFilter]);
+    if(loading){
+        return <Loading />    
+    }
 
     return (
         <div className={cx('profile-dashboard')}>
@@ -229,17 +257,17 @@ function Profile() {
                 <div className={cx('user-profile-card')}>
                     <div className={cx('user-row')}>
                         <div className={cx('user-name-section')}>
-                            <h2>Jesse Daniel Morrison</h2>
-                            <Image className={cx("user-logo")} src={"no-image.jpg"} alt={"user-logo"} />
+                            <h2>{userInfo?.fullName}</h2>
+                            <Image className={cx("user-logo")} src={userInfo?.avatar} alt={"user-logo"} />
                             <div className={cx('user-badges')}>
                                 <span className={cx('badge')}>
-                                    <FontAwesomeIcon icon={faUser} /> User
+                                    <FontAwesomeIcon icon={faUser} /> {userInfo?.type}
                                 </span>
                                 <span className={cx('badge')}>
-                                    <FontAwesomeIcon icon={faCircleCheck} /> Active
+                                    <FontAwesomeIcon icon={faCircleCheck} /> {userInfo?.status}
                                 </span>
                                 <span className={cx('badge')}>
-                                    <FontAwesomeIcon icon={faAt} /> @jessedaniel
+                                    <FontAwesomeIcon icon={faAt} /> {userInfo?.username}
                                 </span>
                             </div>
                         </div>
@@ -249,33 +277,33 @@ function Profile() {
                         <div className={cx('detail-item')}>
                             <FontAwesomeIcon icon={faEnvelope} />
                             <span className={cx('label')}>Email</span>
-                            <span className={cx('value')}>jesse.d@example.com</span>
+                            <span className={cx('value')}>{userInfo?.email}</span>
                         </div>
                         <div className={cx('detail-item')}>
                             <FontAwesomeIcon icon={faPhone} />
                             <span className={cx('label')}>Phone</span>
-                            <span className={cx('value')}>+1 (555) 782-3412</span>
+                            <span className={cx('value')}>{userInfo?.phoneNumber}</span>
                         </div>
                         <div className={cx('detail-item')}>
                             <FontAwesomeIcon icon={faCakeCandles} />
                             <span className={cx('label')}>D.O.B.</span>
-                            <span className={cx('value')}>1992-04-23</span>
+                            <span className={cx('value')}>{userInfo?.dateOfBirth}</span>
                         </div>
                         <div className={cx('detail-item')}>
                             <FontAwesomeIcon icon={faVenusMars} />
                             <span className={cx('label')}>Gender</span>
-                            <span className={cx('value')}>Male</span>
+                            <span className={cx('value')}>{userInfo?.gender}</span>
                         </div>
                         <div className={cx('detail-item')}>
                             <FontAwesomeIcon icon={faCalendar} />
                             <span className={cx('label')}>Joined</span>
-                            <span className={cx('value')}>2024-02-15</span>
+                            <span className={cx('value')}>{new Date(userInfo?.createdAt.split("T")[0]).toLocaleDateString()}</span>
                         </div>
-                        <div className={cx('detail-item')}>
+                        {/* <div className={cx('detail-item')}>
                             <FontAwesomeIcon icon={faClock} />
                             <span className={cx('label')}>Last update</span>
                             <span className={cx('value')}>2025-01-10</span>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className={cx('stats-mini')}>

@@ -1,10 +1,10 @@
 import styles from '../common.module.scss'
 import classNames from 'classnames/bind';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faProjectDiagram, faSpinner, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle, faFacebookF } from '@fortawesome/free-brands-svg-icons';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { KeyRouteFullPath } from '~/utils';
 import config from '~/config';
 import authService from '~/services/AuthService';
@@ -18,7 +18,8 @@ const cx = classNames.bind(styles);
 
 function Login() {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const location = useLocation();
+  const { login, isAuthenticated } = useAuth();
   const [formData, setFormData] = useState({
     username: '',  // Changed from email to username
     password: ''
@@ -27,6 +28,17 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
+  const from = location.state?.from?.pathname || "/";
+  // useEffect(() => {
+  //   // navigate(-1);
+  //   if (isAuthenticated) {
+  //     navigate(from, { replace: true });
+  //   }
+  // }, [isAuthenticated, from])
+  if (isAuthenticated) {
+    return <Navigate to={from} replace />;
+  }
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;

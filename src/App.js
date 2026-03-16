@@ -101,15 +101,15 @@ function App() {
                                                 key={index}
                                                 path={route.path}
                                                 element={
-                                                    <PrivateRoute>
+                                                    
                                                         <Layout headerName = {route.headerName}>
-                                                            
+                                                            <PrivateRoute>
                                                             <Suspense fallback={<Loading />}>
                                                                 <Page />
                                                             </Suspense>
-                                                            
+                                                            </PrivateRoute>
                                                         </Layout>
-                                                    </PrivateRoute>
+                                                    
                                                 }
                                             >
                                                 {RenderChildRoute(route.insideRoute)}
@@ -121,15 +121,14 @@ function App() {
                                             key={index}
                                             path={route.path}
                                             element={
-                                                <PrivateRoute>
+                                                
                                                     <Layout headerName = {route.headerName}>
-                                                        
+                                                        <PrivateRoute>
                                                             <Suspense fallback={<Loading />}>
                                                                 <Page />
                                                             </Suspense>
-                                                        
+                                                        </PrivateRoute>
                                                     </Layout>
-                                                </PrivateRoute>
                                             }
                                         />
                                     );

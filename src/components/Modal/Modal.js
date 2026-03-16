@@ -5,7 +5,7 @@ const cx = classNames.bind(styles);
 
 function Modal({children, conditionOpen = false, onClickModalOverlay = {}, header, footer}) {
 
-    return <div className={cx('modal-overlay', {active: conditionOpen})} onClick={onClickModalOverlay}>
+    return conditionOpen && <div className={cx('modal-overlay', {active: conditionOpen})} onClick={onClickModalOverlay}>
         <div className={cx('modal-content')} onClick={(e) => e.stopPropagation()}>
             <div className={cx('modal-header')}>
                 {header}

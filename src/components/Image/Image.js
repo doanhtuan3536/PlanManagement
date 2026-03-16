@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import classNames from 'classnames';
 
 import images from '~/assets/images';
@@ -12,6 +12,9 @@ function Image({ src, alt, className, fallback: customFallback = images.noImage5
     function HandleError() {
         setFallback(customFallback);
     }
+    useEffect(() => {
+        setFallback('');
+    }, [src]);
     return <img className={cx(className)} src={fallback || src || "no-image"} alt={alt} {...props} onError={HandleError} />;
 }
 

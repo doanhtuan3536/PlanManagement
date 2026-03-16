@@ -21,12 +21,12 @@ export const AuthProvider = ({ children }) => {
 
   const initializeAuth = async () => {
   try {
+    setLoading(true);
     const result = await authService.getCurrentUser();
 
     if (result.success) {
       setUser(result.user);
       setIsAuthenticated(true);
-      navigate(-1);
     } else {
       setUser(null);
       setIsAuthenticated(false);
@@ -39,11 +39,8 @@ export const AuthProvider = ({ children }) => {
   }
 };
 
-  // Check authentication status on app load
   useEffect(() => {
     initializeAuth();
-    
-    // Listen for auth changes (login/logout)
     const handleAuthChange = () => {
       checkAuthStatus();
     };
@@ -81,13 +78,26 @@ export const AuthProvider = ({ children }) => {
     return result;
   };
 
+  const getUserInfo = async () => {
+      const result = await authService.getUserInfo();
+      return result;
+  }
+
+  const uploadAvatar = async (file) => {
+      const result = await authService.uploadAvatar(file);
+      return result;
+  }
+
   const value = {
     user,
     isAuthenticated,
     loading,
     login,
     logout,
-    setLoading
+    setLoading,
+    getUserInfo,
+    uploadAvatar,
+    setUser
   };
 
   return (
